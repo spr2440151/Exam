@@ -33,10 +33,7 @@
 				<%= stu.isAttend() ? "○" : "×" %>
 			</td>
 			<td style="padding-left: 220px; border-bottom: 1px solid #ccc;"colspan="2">
-				<a href="SubjectUpdate.action">変更</a>
-			</td>
-			<td style="padding-left: 15px; border-bottom: 1px solid #ccc;">
-				<a href="SubjectDelete.action">削除</a>
+				<a href="SubjectUpdate.action?id=<%=stu.getNo()%>">変更</a>
 			</td>
 		</tr>
 	<% } %>
