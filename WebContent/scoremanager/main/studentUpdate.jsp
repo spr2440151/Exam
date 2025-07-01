@@ -27,7 +27,7 @@
 <form action="StudentUpdateExecute.action" method="get">
 	<div class="mb-3">
 		<label for="id" class="form-label">入学年度</label>
-			<input type="text" name="id" id="id" class="form-control" value="${student.entYaer}" readonly>
+			<input type="text" name="id" id="id" class="form-control" value="${student.entYear}" readonly>
 	</div>
 
 	<div class="mb-3">
@@ -52,7 +52,7 @@
 	</div>
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
-	<a href="subjectList.jsp" class="btn btn-link">戻る</a>
+	<a href="studenttList.jsp" class="btn btn-link">戻る</a>
 </form>
 </main>
 </body>

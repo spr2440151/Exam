@@ -37,11 +37,11 @@ public class StudentDao extends Dao {
 
 		while (rs.next()) {
 
-			stu.setNo(rs.getString("nd"));
+			stu.setNo(rs.getString("no"));
 
 			stu.setName(rs.getString("name"));
 
-			stu.setEntYear(rs.getInt("ent_yaer"));
+			stu.setEntYear(rs.getInt("ent_year"));
 
 			stu.setClassNum(rs.getString("Class_num"));
 

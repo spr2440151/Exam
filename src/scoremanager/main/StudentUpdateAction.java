@@ -21,7 +21,7 @@ public class StudentUpdateAction extends Action {
 		Teacher teacher = (Teacher) session.getAttribute("user");
 		School school = teacher.getSchool();
 		String url = "";
-		String no = req.getParameter("no");
+		String no = req.getParameter("id");
 		try {
 			Student  stu = dao.get(no);
 			stu.setSchool(school);
