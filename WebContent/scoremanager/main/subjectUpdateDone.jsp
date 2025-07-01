@@ -13,13 +13,13 @@
 		<html>
 		<head>
 		<body>
-		<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">科目情報変更</h2>
+		<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">学生情報変更</h2>
 		<div>
 			<p class="text-center" style="background-color:#66CC99">変更が完了しました</p>
 		</div>
 		<div></div>
 		<br>
-		<a href="SubjectList.action">科目一覧</a>
+		<a href="StudentList.action">学生一覧</a>
 		</body>
 		</html>
 	</c:param>
