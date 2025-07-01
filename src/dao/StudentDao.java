@@ -92,5 +92,57 @@ public class StudentDao extends Dao {
 
 		return list;
 	}
+
+	public boolean save(Student student) throws Exception {
+	    boolean result = false;
+
+	    Connection con = getConnection();
+
+	    // cdチェック
+	    PreparedStatement checkSt = con.prepareStatement(
+	    		"SELECT COUNT(*) FROM student WHERE no = ?");
+	    checkSt.setString(1, student.getNo());
+	    ResultSet rs = checkSt.executeQuery();
+
+	    boolean exists = false;
+	    if (rs.next()) {
+	        exists = rs.getInt(1) > 0;
+	    }
+	    rs.close();
+	    checkSt.close();
+
+	    PreparedStatement st;
+
+	    if (exists) {
+	        // 更新処理
+	        st = con.prepareStatement("UPDATE student SET name = ?, class_num = ?, is_attend = ? WHERE no = ?");
+	        System.out.println("更新");
+	        st.setString(1, student.getName());
+	        st.setString(2, student.getClassNum());
+	        st.setBoolean(3, student.isAttend());
+	        st.setString(4, student.getNo());
+	    } else {
+	        // 挿入処理
+	        st = con.prepareStatement(
+	        		"INSERT INTO subject (no, name, ent_year, class_num, is_attend, school_cd) VALUES (?, ?, ?, ?, ?, ?)");
+	        System.out.println("挿入");
+	        School school = student.getSchool();
+	        String school_cd = school.getCd();
+	        st.setString(1, student.getNo());
+	        st.setString(2, student.getName());
+	        st.setInt(3, student.getEntYear());
+	        st.setString(4, student.getClassNum());
+	        st.setBoolean(5, student.isAttend());
+	        st.setString(3, school_cd);
+	    }
+
+	    int rows = st.executeUpdate();
+	    result = rows > 0;
+
+	    st.close();
+	    con.close();
+
+	    return result;
+	}
 }
 
