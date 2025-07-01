@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 import bean.Student;
 
-public class StudentDao {
+public class StudentDao extends Dao {
 
 	public Student get(String no ) throws Exception {
 
@@ -54,14 +54,5 @@ public class StudentDao {
 		return stu;
 
 	}
-
-	private Connection getConnection() {
-
-		// TODO 自動生成されたメソッド・スタブ
-
-		return null;
-
-	}
-
 }
 
