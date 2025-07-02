@@ -22,6 +22,7 @@ public class StudentUpdateExecuteAction extends Action {
 		String cl = req.getParameter("class");
     	String name = req.getParameter("name");
     	School school = (School)req.getAttribute("school");
+    	boolean attend =Boolean.parseBoolean( req.getParameter("isAttend"));
     	Student stu = new Student();
     	String url ="";
 
@@ -41,12 +42,14 @@ public class StudentUpdateExecuteAction extends Action {
 			url = "StudentUpdate.jsp";
 			req.getRequestDispatcher(url).forward(req, res);
 		} else {
+			stu.setNo(req.getParameter("no"));
 			stu.setClassNum(cl);
 			stu.setName(name);
 			stu.setSchool(school);
+			stu.setAttend(attend);
 			dao.save(stu);
 			//リダイレクト
-			url = "StudentUpdateDone.jsp";
+			url = "studentUpdateDone.jsp";
 			res.sendRedirect(url);
 		}
     }

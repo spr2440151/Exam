@@ -27,12 +27,12 @@
 <form action="StudentUpdateExecute.action" method="get">
 	<div class="mb-3">
 		<label for="id" class="form-label">入学年度</label>
-			<input type="text" name="id" id="id" class="form-control" value="${student.entYear}" readonly>
+			<input type="text" name="year" id="id" class="form-control" value="${student.entYear}" readonly>
 	</div>
 
 	<div class="mb-3">
 		<label for="id" class="form-label">学生番号</label>
-			<input type="text" name="id" id="id" class="form-control" value="${student.no}" readonly>
+			<input type="text" name="no" id="id" class="form-control" value="${student.no}" readonly>
 	</div>
 	        <!-- メッセージ表示 -->
 	<c:if test="${errors.size()>0}">
@@ -46,10 +46,22 @@
 		<label for="name" class="form-label">学生氏名</label>
 			<input type="text" name="name" id="name" class="form-control" value="${student.name}" required>
 	</div>
-	<div class="mb-3">
-		<label for="id" class="form-label">クラス</label>
-			<input type="text" name="id" id="id" class="form-control" value="${student.classNum}" >
+		<div class="mb-3">
+	  <label for="class" class="form-label">クラス</label>
+	  <select name="class" id="class" class="form-select">
+	    <c:forEach items="${classList}" var="cls">
+	      <option value="${cls.id}"
+	        <c:if test="${cls.id eq student.classNum}">
+	          selected="selected"
+	        </c:if>>
+	        ${cls.name}
+	      </option>
+	    </c:forEach>
+	  </select>
 	</div>
+	<div>
+	 <input type="checkbox" name="isAttend" id="id" checked value="True" />在学中
+	 </div>
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
 	<a href="studenttList.jsp" class="btn btn-link">戻る</a>

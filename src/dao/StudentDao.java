@@ -101,12 +101,14 @@ public class StudentDao extends Dao {
 	    // cdチェック
 	    PreparedStatement checkSt = con.prepareStatement(
 	    		"SELECT COUNT(*) FROM student WHERE no = ?");
+	    System.out.println(student.getNo());
 	    checkSt.setString(1, student.getNo());
 	    ResultSet rs = checkSt.executeQuery();
 
 	    boolean exists = false;
 	    if (rs.next()) {
 	        exists = rs.getInt(1) > 0;
+	        System.out.println(exists);
 	    }
 	    rs.close();
 	    checkSt.close();
@@ -124,7 +126,7 @@ public class StudentDao extends Dao {
 	    } else {
 	        // 挿入処理
 	        st = con.prepareStatement(
-	        		"INSERT INTO subject (no, name, ent_year, class_num, is_attend, school_cd) VALUES (?, ?, ?, ?, ?, ?)");
+	        		"INSERT INTO student (no, name, ent_year, class_num, is_attend, school_cd) VALUES (?, ?, ?, ?, ?, ?)");
 	        System.out.println("挿入");
 	        School school = student.getSchool();
 	        String school_cd = school.getCd();
@@ -133,7 +135,7 @@ public class StudentDao extends Dao {
 	        st.setInt(3, student.getEntYear());
 	        st.setString(4, student.getClassNum());
 	        st.setBoolean(5, student.isAttend());
-	        st.setString(3, school_cd);
+	        st.setString(6, school_cd);
 	    }
 
 	    int rows = st.executeUpdate();
