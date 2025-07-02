@@ -1,5 +1,9 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="bean.Student, java.util.List" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.HashSet" %>
+<%List<Student>list=(List<Student>)session.getAttribute("list");%>
 <%@page import="bean.Student" %>
 <c:import url="/common/base.jsp">
 <c:param name="title">
@@ -46,25 +50,27 @@
 		<label for="name" class="form-label">学生氏名</label>
 			<input type="text" name="name" id="name" class="form-control" value="${student.name}" required>
 	</div>
-		<div class="mb-3">
-	  <label for="class" class="form-label">クラス</label>
-	  <select name="class" id="class" class="form-select">
-	    <c:forEach items="${classList}" var="cls">
-	      <option value="${cls.id}"
-	        <c:if test="${cls.id eq student.classNum}">
-	          selected="selected"
-	        </c:if>>
-	        ${cls.name}
-	      </option>
-	    </c:forEach>
-	  </select>
-	</div>
+		<label>クラス</label><br>
+
+	        <%
+	            Set<String> classSet = new HashSet<>();
+	            for (Student stu : list) {
+	            classSet.add(stu.getClassNum());
+	         }
+	         %>
+
+	       <select name="class" required style="width:100%;">
+	<%  boolean first = true;
+	           for (String classNum : classSet) { %>
+	<option><%= classNum %></option>
+	<% } %>
+	</select>
 	<div>
 	 <input type="checkbox" name="isAttend" id="id" checked value="True" />在学中
 	 </div>
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
-	<a href="studenttList.jsp" class="btn btn-link">戻る</a>
+	<a href="studentList.jsp" class="btn btn-link">戻る</a>
 </form>
 </main>
 </body>
