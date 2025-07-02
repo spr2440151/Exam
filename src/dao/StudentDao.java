@@ -58,7 +58,7 @@ public class StudentDao extends Dao {
 
 	}
 
-	public List<Student> filter(School school) throws Exception {
+	public List<Student> filter(School school, boolean isAttend) throws Exception {
 		List<Student> list = new ArrayList<>();
 
 		// データベース接続取得
@@ -66,11 +66,12 @@ public class StudentDao extends Dao {
 
 		// SQL文の準備
 		PreparedStatement st = con.prepareStatement(
-			"SELECT * FROM student WHERE school_cd LIKE ?");
+			"SELECT * FROM student WHERE school_cd LIKE ? ORDER BY is_attend = ?");
 
 		// schoolがnullまたはcdがnullの場合は""（空文字）を代入
 		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
 		st.setString(1, "%" + cd + "%");
+		st.setBoolean(2, isAttend);
 
 		// SQL実行
 		ResultSet rs = st.executeQuery();

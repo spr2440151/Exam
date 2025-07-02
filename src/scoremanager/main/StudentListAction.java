@@ -24,7 +24,8 @@ public class StudentListAction extends Action {
 			StudentDao dao = new StudentDao();
 			Teacher teacher = (Teacher) session.getAttribute("user");
 			School school = teacher.getSchool();
-			List<Student> list = dao.filter(school);
+			boolean isAttend = false;
+			List<Student> list = dao.filter(school, isAttend);
 
 //			Collections.sort(list, new Comparator<Student>() {
 //				public int compare(Student s1, Student s2) {
