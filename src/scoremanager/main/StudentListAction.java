@@ -1,5 +1,7 @@
 package scoremanager.main;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,23 @@ public class StudentListAction extends Action {
 			School school = teacher.getSchool();
 			List<Student> list = dao.filter(school);
 
+			// 並び替え処理をここで実施！
+			Collections.sort(list, new Comparator<Student>() {
+				public int compare(Student s1, Student s2) {
+					// ① 入学年度 昇順
+					int cmp = Integer.compare(s1.getEntYear(), s2.getEntYear());
+					if (cmp != 0) return cmp;
+
+					// ② 学籍番号 昇順（no は文字列なので注意）
+					cmp = s1.getNo().compareToIgnoreCase(s2.getNo());
+					if (cmp != 0) return cmp;
+
+					// ③ クラス番号 昇順
+					return s1.getClassNum().compareToIgnoreCase(s2.getClassNum());
+				}
+			});
+
+
 //			Collections.sort(list, new Comparator<Student>() {
 //				public int compare(Student s1, Student s2) {
 //					return s1.getCd().compareToIgnoreCase(s2.getCd());
@@ -46,4 +65,3 @@ public class StudentListAction extends Action {
 	}
 
 }
-
