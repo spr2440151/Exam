@@ -43,7 +43,7 @@ public class SubjectUpdateExecuteAction extends Action {
 		} else {
 			sub.setCd(cd);
 			sub.setName(name);
-			sub.setSchool(school);
+			//sub.setSchool(school);
 			dao.save(sub);
 			//リダイレクト
 			url = "subjectUpdateDone.jsp";

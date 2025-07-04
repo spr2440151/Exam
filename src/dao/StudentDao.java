@@ -58,7 +58,7 @@ public class StudentDao extends Dao {
 
 	}
 
-	public List<Student> filter(School school) throws Exception {
+	public List<Student> filter(School school, boolean isAttend) throws Exception {
 		List<Student> list = new ArrayList<>();
 
 		// データベース接続取得
@@ -66,11 +66,12 @@ public class StudentDao extends Dao {
 
 		// SQL文の準備
 		PreparedStatement st = con.prepareStatement(
-			"SELECT * FROM student WHERE school_cd LIKE ?");
+			"SELECT * FROM student WHERE school_cd LIKE ? ORDER BY is_attend = ?");
 
 		// schoolがnullまたはcdがnullの場合は""（空文字）を代入
 		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
 		st.setString(1, "%" + cd + "%");
+		st.setBoolean(2, isAttend);
 
 		// SQL実行
 		ResultSet rs = st.executeQuery();
@@ -107,6 +108,7 @@ public class StudentDao extends Dao {
 	    boolean exists = false;
 	    if (rs.next()) {
 	        exists = rs.getInt(1) > 0;
+
 	    }
 	    rs.close();
 	    checkSt.close();
@@ -116,7 +118,6 @@ public class StudentDao extends Dao {
 	    if (exists) {
 	        // 更新処理
 	        st = con.prepareStatement("UPDATE student SET name = ?, class_num = ?, is_attend = ? WHERE no = ?");
-	        System.out.println("更新");
 	        st.setString(1, student.getName());
 	        st.setString(2, student.getClassNum());
 	        st.setBoolean(3, student.isAttend());
@@ -124,7 +125,7 @@ public class StudentDao extends Dao {
 	    } else {
 	        // 挿入処理
 	        st = con.prepareStatement(
-	        		"INSERT INTO subject (no, name, ent_year, class_num, is_attend, school_cd) VALUES (?, ?, ?, ?, ?, ?)");
+	        		"INSERT INTO student (no, name, ent_year, class_num, is_attend, school_cd) VALUES (?, ?, ?, ?, ?, ?)");
 	        System.out.println("挿入");
 	        School school = student.getSchool();
 	        String school_cd = school.getCd();
@@ -133,7 +134,7 @@ public class StudentDao extends Dao {
 	        st.setInt(3, student.getEntYear());
 	        st.setString(4, student.getClassNum());
 	        st.setBoolean(5, student.isAttend());
-	        st.setString(3, school_cd);
+	        st.setString(6, school_cd);
 	    }
 
 	    int rows = st.executeUpdate();
