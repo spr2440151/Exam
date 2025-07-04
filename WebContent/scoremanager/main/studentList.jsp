@@ -46,7 +46,7 @@
   </div>
 
   <!-- 学生一覧テーブル -->
-  <table class="table mt-3 border-top border-bottom">
+  <table class="table table-bordered mt-3">
     <thead>
       <tr>
         <th>入学年度</th>
