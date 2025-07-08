@@ -1,7 +1,7 @@
 package scoremanager.main;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,53 +16,47 @@ import tool.Action;
 
 public class StudentListAction extends Action {
 
-	public void execute(HttpServletRequest req, HttpServletResponse res)
-			throws Exception {
-
+	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		try {
-			//ローカル変数の宣言 1
-			String url = "";
-			HttpSession session=req.getSession();
+			HttpSession session = req.getSession();
 			StudentDao dao = new StudentDao();
 			Teacher teacher = (Teacher) session.getAttribute("user");
 			School school = teacher.getSchool();
-			boolean isAttend = false;
-			List<Student> list = dao.filter(school, isAttend);
 
-			// 並び替え処理をここで実施！
-			Collections.sort(list, new Comparator<Student>() {
-				public int compare(Student s1, Student s2) {
-					// ① 入学年度 昇順
-					int cmp = Integer.compare(s1.getEntYear(), s2.getEntYear());
-					if (cmp != 0) return cmp;
+			// パラメータ取得
+			String enty = req.getParameter("entYear");
+			String classNum = req.getParameter("classNum");
+			boolean isAttend = "true".equals(req.getParameter("attend"));
 
-					// ② 学籍番号 昇順（no は文字列なので注意）
-					cmp = s1.getNo().compareToIgnoreCase(s2.getNo());
-					if (cmp != 0) return cmp;
+			List<Student> list;
 
-					// ③ クラス番号 昇順
-					return s1.getClassNum().compareToIgnoreCase(s2.getClassNum());
+			if (enty != null && !enty.isEmpty()) {
+				int entYear = Integer.parseInt(enty);
+				if (classNum != null && !classNum.isEmpty()) {
+					// 入学年度 + クラス + 在学中（任意）
+					list = dao.filter(school, entYear, classNum, isAttend);
+				} else {
+					// 入学年度のみ + 在学中（任意）
+					list = dao.filter(school, entYear, isAttend);
 				}
-			});
+			} else {
+				// 入学年度なし → 在学中（任意）のみ
+				list = dao.filter(school, isAttend);
+			}
 
+			List<Integer> yearList = new ArrayList<>();
+			LocalDate localDate = LocalDate.now();
+			int currentYear = localDate.getYear();
+			for (int i = currentYear - 10; i <= currentYear; i++) {
+			    yearList.add(i);
+			}
 
-//			Collections.sort(list, new Comparator<Student>() {
-//				public int compare(Student s1, Student s2) {
-//					return s1.getCd().compareToIgnoreCase(s2.getCd());
-//				}
-//			});
-
+			session.setAttribute("yearList", yearList);
 			session.setAttribute("list", list);
+			req.getRequestDispatcher("studentList.jsp").forward(req, res);
 
-			url = "studentList.jsp";
-
-			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {
-
 			e.printStackTrace();
-
 		}
-
 	}
-
 }

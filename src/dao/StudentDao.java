@@ -11,72 +11,13 @@ import bean.Student;
 
 public class StudentDao extends Dao {
 
-	public Student get(String no ) throws Exception {
+	// ベースSQL（学校コード検索用）
+	private final String baseSql =
+			"SELECT * FROM student WHERE school_cd LIKE ?";
 
-		// データベース接続取得
-
-		Connection con = getConnection();
-
-		// SQL文の準備
-
-		PreparedStatement st = con.prepareStatement(
-
-			"SELECT * FROM student WHERE no = ? ");
-
-		// schoolがnullまたはcdがnullの場合は""（空文字）を代入l
-
-		st.setString(1, no);
-
-		// SQL実行
-
-		ResultSet rs = st.executeQuery();
-
-		// 検索結果を変数に追加
-
-		Student stu = new Student();
-
-		while (rs.next()) {
-
-			stu.setNo(rs.getString("no"));
-
-			stu.setName(rs.getString("name"));
-
-			stu.setEntYear(rs.getInt("ent_year"));
-
-			stu.setClassNum(rs.getString("Class_num"));
-
-
-		}
-
-		rs.close();
-
-		st.close();
-
-		con.close();
-
-		return stu;
-
-	}
-
-	public List<Student> filter(School school, boolean isAttend) throws Exception {
+	// 学生情報をResultSetから取得してリストに追加する共通メソッド
+	private List<Student> postfilter(ResultSet rs, School school) throws Exception {
 		List<Student> list = new ArrayList<>();
-
-		// データベース接続取得
-		Connection con = getConnection();
-
-		// SQL文の準備
-		PreparedStatement st = con.prepareStatement(
-			"SELECT * FROM student WHERE school_cd LIKE ? ORDER BY is_attend = ?");
-
-		// schoolがnullまたはcdがnullの場合は""（空文字）を代入
-		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
-		st.setString(1, "%" + cd + "%");
-		st.setBoolean(2, isAttend);
-
-		// SQL実行
-		ResultSet rs = st.executeQuery();
-
-		// 検索結果をリストに追加
 		while (rs.next()) {
 			Student stu = new Student();
 			stu.setEntYear(rs.getInt("ent_year"));
@@ -84,8 +25,113 @@ public class StudentDao extends Dao {
 			stu.setName(rs.getString("name"));
 			stu.setClassNum(rs.getString("class_num"));
 			stu.setAttend(rs.getBoolean("is_attend"));
+			stu.setSchool(school);
 			list.add(stu);
 		}
+		return list;
+	}
+
+	public Student get(String no ) throws Exception {
+		// データベース接続取得
+		Connection con = getConnection();
+
+		// SQL文の準備
+		PreparedStatement st = con.prepareStatement(
+			"SELECT * FROM student WHERE no = ? ");
+		// schoolがnullまたはcdがnullの場合は""（空文字）を代入l
+		st.setString(1, no);
+		// SQL実行
+		ResultSet rs = st.executeQuery();
+
+		// 検索結果を変数に追加
+		Student stu = new Student();
+		while (rs.next()) {
+			stu.setNo(rs.getString("no"));
+			stu.setName(rs.getString("name"));
+			stu.setEntYear(rs.getInt("ent_year"));
+			stu.setClassNum(rs.getString("Class_num"));
+		}
+
+		rs.close();
+		st.close();
+		con.close();
+		return stu;
+	}
+
+	public List<Student> filter(School school, boolean isAttend) throws Exception {
+		List<Student> list = new ArrayList<>();
+		Connection con = getConnection();
+
+		String sql = "";
+		if (isAttend) {
+			sql = baseSql + " AND is_attend = ?";
+		} else {
+			sql = baseSql;
+		}
+		sql += " ORDER BY ent_year, class_num, no, is_attend";
+
+		PreparedStatement st = con.prepareStatement(sql);
+		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
+		st.setString(1, "%" + cd + "%");
+
+		if (isAttend) {
+			st.setBoolean(2, true);
+		}
+
+		ResultSet rs = st.executeQuery();
+		list = postfilter(rs, school);
+
+		rs.close();
+		st.close();
+		con.close();
+
+		return list;
+	}
+
+	public List<Student> filter(School school, int entYear, boolean isAttend) throws Exception {
+		List<Student> list = new ArrayList<>();
+		Connection con = getConnection();
+
+		String sql = baseSql + " AND ent_year = ?";
+		if (isAttend) {
+			sql += " AND is_attend = true";
+		}
+		sql += " ORDER BY ent_year, class_num, no, is_attend";
+
+		PreparedStatement st = con.prepareStatement(sql);
+		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
+		st.setString(1, "%" + cd + "%");
+		st.setInt(2, entYear);
+
+		ResultSet rs = st.executeQuery();
+		list = postfilter(rs, school);
+
+		rs.close();
+		st.close();
+		con.close();
+
+		return list;
+	}
+
+
+	public List<Student> filter(School school, int entYear, String classNum, boolean isAttend) throws Exception {
+		List<Student> list = new ArrayList<>();
+		Connection con = getConnection();
+
+		String sql = baseSql + " AND ent_year = ? AND class_num = ?";
+		if (isAttend) {
+			sql += " AND is_attend = true";
+		}
+		sql += " ORDER BY ent_year, class_num, no, is_attend";
+
+		PreparedStatement st = con.prepareStatement(sql);
+		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
+		st.setString(1, "%" + cd + "%");
+		st.setInt(2, entYear);
+		st.setString(3, classNum);
+
+		ResultSet rs = st.executeQuery();
+		list = postfilter(rs, school);
 
 		rs.close();
 		st.close();
