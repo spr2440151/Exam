@@ -15,7 +15,6 @@ import dao.StudentDao;
 import tool.Action;
 
 public class StudentListAction extends Action {
-
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		try {
 			HttpSession session = req.getSession();
@@ -29,7 +28,6 @@ public class StudentListAction extends Action {
 			boolean isAttend = "true".equals(req.getParameter("attend"));
 
 			List<Student> list;
-
 			if (enty != null && !enty.isEmpty()) {
 				int entYear = Integer.parseInt(enty);
 				if (classNum != null && !classNum.isEmpty()) {
@@ -60,3 +58,4 @@ public class StudentListAction extends Action {
 		}
 	}
 }
+
