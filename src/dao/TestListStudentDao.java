@@ -11,49 +11,47 @@ import bean.TestListStudent;
 
 public class TestListStudentDao extends Dao {
 
+    // 成績一覧取得用のSQL文
+	protected String baseSql =
+		    "SELECT subject.name AS subject_name, subject.cd AS subject_cd, test.no, test.point " +
+		    "FROM test " +
+		    "JOIN subject ON test.subject_cd = subject.cd " +
+		    "WHERE test.student_no = ? " +
+		    "ORDER BY subject.cd, test.no";
 
-	private final String baseSql =
-		"SELECT " +
-		" test.subject_cd, test.no AS test_no, test.point, " +
-		" subject.name AS subject_name " +
-		"FROM test " +
-		"INNER JOIN student ON test.student_no = student.no " +
-		"INNER JOIN subject ON test.subject_cd = subject.cd AND test.school_cd = subject.school_cd " +
-		"WHERE student.no = ? " +
-		"ORDER BY test.subject_cd, test.no";
+    /**
+     * 特定の学生に対応するテスト成績を取得する
+     */
+    public List<TestListStudent> filter(Student student) throws Exception {
+        List<TestListStudent> list;
 
+        try (
+            Connection con = getConnection();
+            PreparedStatement st = con.prepareStatement(baseSql);
+        ) {
+            st.setString(1, student.getNo());
+            try (ResultSet rs = st.executeQuery()) {
+                list = postFilter(rs);
+            }
+        }
 
-	private List<TestListStudent> postfilter(ResultSet rSet) throws Exception {
-		List<TestListStudent> list = new ArrayList<>();
+        return list;
+    }
 
-		while (rSet.next()) {
-			TestListStudent tls = new TestListStudent();
+    /**
+     * ResultSet から TestListStudent リストを作成（内部用）
+     */
+    private List<TestListStudent> postFilter(ResultSet rs) throws Exception {
+        List<TestListStudent> list = new ArrayList<>();
+        while (rs.next()) {
+            TestListStudent t = new TestListStudent();
+            t.setSubjectName(rs.getString("subject_name"));
+            t.setSubjectCd(rs.getString("subject_cd"));
+            t.setNo(rs.getInt("no"));  // ← 修正ここ
+            t.setPoint(rs.getInt("point"));
+            list.add(t);
+        }
+        return list;
+    }
 
-			tls.setSubjectCd(rSet.getString("subject_cd"));
-			tls.setSubjectName(rSet.getString("subject_name"));
-			tls.setNum(rSet.getInt("test_no"));
-			tls.setPoint(rSet.getInt("point"));
-
-			list.add(tls);
-		}
-		return list;
-	}
-
-
-	public List<TestListStudent> filter(Student student) throws Exception {
-		List<TestListStudent> list;
-		Connection con = getConnection();
-
-		PreparedStatement st = con.prepareStatement(baseSql);
-		st.setString(1, student.getNo());
-
-		ResultSet rs = st.executeQuery();
-		list = postfilter(rs);
-
-		rs.close();
-		st.close();
-		con.close();
-
-		return list;
-	}
-}
+    }

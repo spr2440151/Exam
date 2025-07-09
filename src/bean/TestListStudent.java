@@ -12,6 +12,8 @@ public class TestListStudent implements Serializable {
 
 	private int point;
 
+	private int no;
+
 	public String getSubjectName() {
 		return subjectName;
 	}
@@ -42,6 +44,14 @@ public class TestListStudent implements Serializable {
 
 	public void setPoint(int point) {
 		this.point = point;
+	}
+
+	public int getNo(){
+		return no;
+	}
+
+	public void setNo(int no){
+		this.no =no;
 	}
 
 }
