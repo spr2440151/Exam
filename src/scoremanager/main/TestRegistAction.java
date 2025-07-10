@@ -19,64 +19,112 @@ import tool.Action;
 
 public class TestRegistAction extends Action {
 
-	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		try {
-			HttpSession session = req.getSession();
-			SubjectDao sdao = new SubjectDao();
-			TestDao tdao = new TestDao();
-			ClassNumDao cdao = new ClassNumDao();
-			Teacher teacher = (Teacher) session.getAttribute("user");
-			School school = teacher.getSchool();
+    public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        try {
+            HttpSession session = req.getSession();
+            SubjectDao sdao = new SubjectDao();
+            TestDao tdao = new TestDao();
+            ClassNumDao cdao = new ClassNumDao();
+            Teacher teacher = (Teacher) session.getAttribute("user");
+            School school = teacher.getSchool();
 
-			// パラメータ取得
-			String entyStr = req.getParameter("f1");
-			String classNum = req.getParameter("f2");
-			String subCd = req.getParameter("f3");
-			String numStr = req.getParameter("f4");
-			System.out.println("[DEBUG]入学:"+entyStr);
-			System.out.println("[DEBUG]クラス:"+classNum);
-			System.out.println("[DEBUG]科目:"+subCd);
-			System.out.println("[DEBUG]回数:"+numStr);
+            // 入学年度リスト生成
+            List<Integer> yearList = new ArrayList<>();
+            int currentYear = LocalDate.now().getYear();
+            for (int i = currentYear - 10; i <= currentYear + 10; i++) {
+                yearList.add(i);
+            }
+            session.setAttribute("yearList", yearList);
 
-			// 入学年度リスト生成
-			List<Integer> yearList = new ArrayList<>();
-			int currentYear = LocalDate.now().getYear();
-			for (int i = currentYear - 10; i <= currentYear + 10; i++) {
-				yearList.add(i);
-			}
+            // 学校に紐づく科目一覧取得
+            List<Subject> sList = sdao.filter(school);
+            session.setAttribute("sList", sList);
 
-			// 学校に紐づく科目一覧取得
-			List<Subject> sList = sdao.filter(school);
+            // 学校に紐づくクラス一覧取得
+            List<String> cList = cdao.filter(school);
+            session.setAttribute("cList", cList);
 
-			// 学校に紐づくクラス一覧取得
-			List<String> cList = cdao.filter(school);
+            String method = req.getMethod();
 
-			// 検索条件がある場合のみテスト一覧を取得
-			List<Test> tList = null;
-			if (entyStr != null && !entyStr.isEmpty() &&
-				    classNum != null && !classNum.isEmpty() &&
-				    subCd != null && !subCd.isEmpty() &&
-				    numStr != null && !numStr.isEmpty()) {
+            if ("POST".equalsIgnoreCase(method)) {
+                // --- 更新処理 ---
+                // パラメータで送られたテスト情報の点数を更新
+                String[] studentNos = req.getParameterValues("studentNo");
+                String[] points = req.getParameterValues("point");
+                String entyStr = req.getParameter("f1");
+                String classNum = req.getParameter("f2");
+                String subCd = req.getParameter("f3");
+                String numStr = req.getParameter("f4");
 
-				int enty = Integer.parseInt(entyStr);
-			    int num = Integer.parseInt(numStr);
-			    Subject subject = sdao.get(subCd, school);
-			    tList = tdao.filter(enty, classNum, subject, num, school);
-			}
+                if (studentNos != null && points != null &&
+                    entyStr != null && !entyStr.isEmpty() &&
+                    classNum != null && !classNum.isEmpty() &&
+                    subCd != null && !subCd.isEmpty() &&
+                    numStr != null && !numStr.isEmpty()) {
 
+                    int enty = Integer.parseInt(entyStr);
+                    int num = Integer.parseInt(numStr);
+                    Subject subject = sdao.get(subCd, school);
 
-			System.out.println("[DEBUG]s:" + sList);
-			System.out.println("[DEBUG]t:" + tList);
-			System.out.println("[DEBUG]c:" + cList);
-			session.setAttribute("yearList", yearList);
-			session.setAttribute("sList", sList);
-			session.setAttribute("tList", tList);
-			session.setAttribute("cList", cList);
+                    List<Test> updateList = new ArrayList<>();
+                    for (int i = 0; i < studentNos.length; i++) {
+                        String studentNo = studentNos[i];
+                        int point = 0;
+                        try {
+                            point = Integer.parseInt(points[i]);
+                        } catch (NumberFormatException e) {
+                            // 無効な値は0とみなすかスキップなどの対応
+                            point = 0;
+                        }
 
-			req.getRequestDispatcher("testRegist.jsp").forward(req, res);
+                        // Test情報組み立て
+                        Test test = new Test();
+                        test.setSchool(school);
+                        test.setClassNum(classNum);
+                        test.setNo(num);
+                        test.setPoint(point);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+                        // 生徒情報セット（最低限Noだけ）
+                        bean.Student student = new bean.Student();
+                        student.setNo(studentNo);
+                        test.setStudent(student);
+
+                        test.setSubject(subject);
+
+                        updateList.add(test);
+                    }
+                    // DB更新
+                    boolean updated = tdao.save(updateList);
+                    if (!updated) {
+                        req.setAttribute("error", "点数の更新に失敗しました。");
+                    }
+                }
+            }
+
+            // --- 絞り込み条件がある場合は検索して一覧取得 ---
+            String entyStr = req.getParameter("f1");
+            String classNum = req.getParameter("f2");
+            String subCd = req.getParameter("f3");
+            String numStr = req.getParameter("f4");
+
+            List<Test> tList = null;
+            if (entyStr != null && !entyStr.isEmpty() &&
+                classNum != null && !classNum.isEmpty() &&
+                subCd != null && !subCd.isEmpty() &&
+                numStr != null && !numStr.isEmpty()) {
+
+                int enty = Integer.parseInt(entyStr);
+                int num = Integer.parseInt(numStr);
+                Subject subject = sdao.get(subCd, school);
+                tList = tdao.filter(enty, classNum, subject, num, school);
+            }
+            session.setAttribute("tList", tList);
+
+            req.getRequestDispatcher("testRegist.jsp").forward(req, res);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
