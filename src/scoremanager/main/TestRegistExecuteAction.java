@@ -1,5 +1,6 @@
 package scoremanager.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,62 +20,62 @@ import tool.Action;
 public class TestRegistExecuteAction extends Action {
 
     @Override
-
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-    	HttpSession session = req.getSession();
-		SubjectDao subdao = new SubjectDao();
-		StudentDao studao = new StudentDao();
-		TestDao tdao = new TestDao();
-		Teacher teacher = (Teacher) session.getAttribute("user");
-		School school = teacher.getSchool();
-		String url ="";
-		List<Test> list = null;
+        HttpSession session = req.getSession();
+        SubjectDao subdao = new SubjectDao();
+        StudentDao studao = new StudentDao();
+        TestDao tdao = new TestDao();
+        Teacher teacher = (Teacher) session.getAttribute("user");
+        School school = teacher.getSchool();
 
-		// パラメータ取得
-		String[] subCdArray = req.getParameterValues("subject");
-		String[] numStrArray = req.getParameterValues("count");
-		String[] stuNoStrArray = req.getParameterValues("regist");
-		String[] pointStrArray = req.getParameterValues("point");
-		System.out.println("[DEBUG]科目:"+subCdArray);
-		System.out.println("[DEBUG]回数:"+numStrArray);
-		System.out.println("[DEBUG]学番:"+stuNoStrArray);
-		System.out.println("[DEBUG]点数:"+pointStrArray);
+        List<Test> list = new ArrayList<>();
 
-		for (int i = 0; 1 < subCdArray.length; i++) {
-			String subCd = subCdArray[i];
-			Subject sub = subdao.get(subCd, school);
+        // パラメータ取得
+        String[] subCdArray = req.getParameterValues("subject");
+        String[] numStrArray = req.getParameterValues("count");
+        String[] stuNoStrArray = req.getParameterValues("regist");
+        String[] pointStrArray = req.getParameterValues("point");
 
-			String stuNo =  stuNoStrArray[i];
-			Student stu = studao.get(stuNo);
+        System.out.println("[DEBUG]科目:" + subCdArray);
+        System.out.println("[DEBUG]回数:" + numStrArray);
+        System.out.println("[DEBUG]学番:" + stuNoStrArray);
+        System.out.println("[DEBUG]点数:" + pointStrArray);
 
-			String numStr = numStrArray[i];
-			int no = Integer.parseInt(numStr);
+        for (int i = 0; i < subCdArray.length; i++) {
+            String subCd = subCdArray[i];
+            Subject sub = subdao.get(subCd, school);
 
-			String pointStr = pointStrArray[i];
-			if (pointStr == "") {
-				int point = null;
-			} else {
-				int point = Integer.parseInt(pointStr);
-			}
+            String stuNo = stuNoStrArray[i];
+            Student stu = studao.get(stuNo);
 
-			String classNum = stu.getClassNum();
+            int no = Integer.parseInt(numStrArray[i]);
 
-			Test test = new Test();
-			test.setStudent(stu);
-			test.setSubject(sub);
-			test.setClassNum(classNum);
-			test.setNo(no);
-			test.setPoint(point);
-			test.setSchool(school);
+            Integer point = null; // 初期値null
+            if (pointStrArray[i] != null && !pointStrArray[i].isEmpty()) {
+                try {
+                    point = Integer.parseInt(pointStrArray[i]);
+                } catch (NumberFormatException e) {
+                    point = null; // 無効な入力はnull扱い
+                }
+            }
 
-			list.add(test);
-		}
+            String classNum = stu.getClassNum();
 
-		tdao.save(list);
-		//リダイレクト
-		url = "testRegistDone.jsp";
-		res.sendRedirect(url);
+            Test test = new Test();
+            test.setStudent(stu);
+            test.setSubject(sub);
+            test.setClassNum(classNum);
+            test.setNo(no);
+            test.setPoint(point); // nullの場合もOK
+            test.setSchool(school);
 
+            list.add(test);
+        }
+
+        tdao.save(list);
+
+        // リダイレクト
+        res.sendRedirect("testRegistDone.jsp");
     }
 }
