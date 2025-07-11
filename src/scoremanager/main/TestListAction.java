@@ -17,7 +17,6 @@ import bean.TestListSubject;
 import dao.ClassNumDao;
 import dao.SubjectDao;
 import dao.TestDao;
-import dao.TestListStudentDao;
 import dao.TestListSubjectDao;
 import tool.Action;
 
@@ -28,7 +27,7 @@ public class TestListAction extends Action {
             SubjectDao sdao = new SubjectDao();
             TestDao tdao = new TestDao();
             ClassNumDao cdao = new ClassNumDao();
-            TestListStudentDao stuldao = new TestListStudentDao();
+
             TestListSubjectDao subldao = new TestListSubjectDao();
             Teacher teacher = (Teacher) session.getAttribute("user");
             School school = teacher.getSchool();
@@ -61,19 +60,25 @@ public class TestListAction extends Action {
                 classNum != null && !classNum.isEmpty() &&
                 subCd != null && !subCd.isEmpty()) {
 
+            	System.out.println("if文チェック");
                 int enty = Integer.parseInt(entyStr);
                 Subject subject = sdao.get(subCd, school);
                 tList = tdao.filter(enty, classNum, subject, enty, school);
+
+                Subject sub = sdao.get(subCd, school);
+
+                List<TestListSubject> sublist =  subldao.filter(enty, classNum, sub, school);
+                session.setAttribute("enty", enty);
+                session.setAttribute("classnum", classNum);
+                session.setAttribute("subt", sub);
+                session.setAttribute("school", school);
+                session.setAttribute("subList", sublist);
             }
 
-            int enty = Integer.parseInt(entyStr);
-            Subject sub = sdao.get(subCd, school);
+//            int enty = Integer.parseInt(entyStr);
+//            Subject sub = sdao.get(subCd, school);
 
-            List<TestListSubject> sublist =  subldao.filter(enty, classNum, sub, school);
-            session.setAttribute("enty", enty);
-            session.setAttribute("classnum", classNum);
-            session.setAttribute("subt", sub);
-            session.setAttribute("school", school);
+
 
 
             System.out.println("[DEBUG]s:" + sList);
