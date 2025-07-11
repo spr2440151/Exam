@@ -26,7 +26,7 @@
   <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
   <!-- 🔍 検索フォーム -->
-  <form action="TestList.action" method="get" class="border p-3 mb-3 bg-light rounded">
+  <form action="TestListSubjectExecute.action" method="get" class="border p-3 mb-3 bg-light rounded">
   <div class="row g-3 align-items-center">
     <!-- 科目情報（ラベルのみ） -->
     <div class="col-2">
@@ -50,7 +50,9 @@
         </c:forEach>
       </select>
     </div>
+  </div>
 
+  <div>
     <!-- クラス -->
     <div class="col-2">
       <label for="classNum" class="col-form-label">クラス</label>
@@ -78,12 +80,14 @@
       <button type="submit" class="btn btn-secondary">検索</button>
     </div>
   </div>
+  </form>
 
 
 
   <hr class="my-3">
 
   <!-- 学生情報 -->
+<form action="TestListStudentExecute.action">
 <div class="row g-3 align-items-center mt-3">
   <!-- 学生情報ラベル -->
   <div class="col-2">
