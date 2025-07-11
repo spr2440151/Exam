@@ -13,23 +13,20 @@ import bean.School;
 import bean.Student;
 import bean.Subject;
 import bean.Teacher;
-import bean.Test;
 import bean.TestListStudent;
 import bean.TestListSubject;
 import dao.ClassNumDao;
 import dao.StudentDao;
 import dao.SubjectDao;
-import dao.TestDao;
 import dao.TestListStudentDao;
 import dao.TestListSubjectDao;
 import tool.Action;
 
-public class TestListAction extends Action {
+public class TestListSubjectExecuteAction extends Action {
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
         try {
             HttpSession session = req.getSession();
             SubjectDao sdao = new SubjectDao();
-            TestDao tdao = new TestDao();
             ClassNumDao cdao = new ClassNumDao();
             StudentDao studao = new StudentDao();
 
@@ -62,16 +59,12 @@ public class TestListAction extends Action {
             List<String> cList = cdao.filter(school);
 
             // 検索条件がある場合のみテスト一覧を取得
-            List<Test> tList = null;
             if (entyStr != null && !entyStr.isEmpty() &&
                 classNum != null && !classNum.isEmpty() &&
                 subCd != null && !subCd.isEmpty()) {
 
             	System.out.println("if文チェック");
                 int enty = Integer.parseInt(entyStr);
-                Subject subject = sdao.get(subCd, school);
-                tList = tdao.filter(enty, classNum, subject, enty, school);
-
                 Subject sub = sdao.get(subCd, school);
                 Student stu = studao.get(no);
 
@@ -86,14 +79,12 @@ public class TestListAction extends Action {
             }
 
             System.out.println("[DEBUG]s:" + sList);
-            System.out.println("[DEBUG]t:" + tList);
             System.out.println("[DEBUG]c:" + cList);
             session.setAttribute("yearList", yearList);
             session.setAttribute("sList", sList);
-            session.setAttribute("tList", tList);
             session.setAttribute("cList", cList);
 
-            req.getRequestDispatcher("testList.jsp").forward(req, res);
+            req.getRequestDispatcher("testListStudent.jsp").forward(req, res);
 
         } catch (Exception e) {
             e.printStackTrace();
