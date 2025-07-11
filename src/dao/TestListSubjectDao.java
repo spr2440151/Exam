@@ -55,6 +55,7 @@ public class TestListSubjectDao extends Dao {
                 testList.setClassNum(rs.getString("class_num"));
                 testList.setStudentNo(studentNo);
                 testList.setStudentName(rs.getString("student_name"));
+                testList.setPoints(new LinkedHashMap<>());
                 map.put(studentNo, testList);
             }
 

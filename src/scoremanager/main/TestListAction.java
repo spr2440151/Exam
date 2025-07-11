@@ -99,7 +99,7 @@ public class TestListAction extends Action {
             session.setAttribute("tList", tList);
             session.setAttribute("cList", cList);
 
-            req.getRequestDispatcher("testReferece.jsp").forward(req, res);
+            req.getRequestDispatcher("testList.jsp").forward(req, res);
 
         } catch (Exception e) {
             e.printStackTrace();
