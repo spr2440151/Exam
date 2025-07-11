@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="bean.Test, bean.Subject, java.util.List" %>
+<%@page import="bean.Test, bean.Subject,bean.TestListSubject, java.util.List" %>
 <%@page import="java.util.Set, java.util.LinkedHashSet" %>
 
 <%
@@ -8,6 +8,7 @@
     List<Subject> slist = (List<Subject>) session.getAttribute("sList");
     List<String> clist = (List<String>) session.getAttribute("cList");
     List<Integer> yearList = (List<Integer>) session.getAttribute("yearList");
+    List<TestListSubject> subList = (List<TestListSubject>) session.getAttribute("subList");
 
     // 検索条件の値を保持（f1〜f4）
     String f1 = request.getParameter("f1");
@@ -77,6 +78,8 @@
       <button type="submit" class="btn btn-secondary">検索</button>
     </div>
   </div>
+
+
 
   <hr class="my-3">
 

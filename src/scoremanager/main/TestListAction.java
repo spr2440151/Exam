@@ -13,9 +13,12 @@ import bean.School;
 import bean.Subject;
 import bean.Teacher;
 import bean.Test;
+import bean.TestListSubject;
 import dao.ClassNumDao;
 import dao.SubjectDao;
 import dao.TestDao;
+import dao.TestListStudentDao;
+import dao.TestListSubjectDao;
 import tool.Action;
 
 public class TestListAction extends Action {
@@ -25,6 +28,8 @@ public class TestListAction extends Action {
             SubjectDao sdao = new SubjectDao();
             TestDao tdao = new TestDao();
             ClassNumDao cdao = new ClassNumDao();
+            TestListStudentDao stuldao = new TestListStudentDao();
+            TestListSubjectDao subldao = new TestListSubjectDao();
             Teacher teacher = (Teacher) session.getAttribute("user");
             School school = teacher.getSchool();
 
@@ -60,6 +65,16 @@ public class TestListAction extends Action {
                 Subject subject = sdao.get(subCd, school);
                 tList = tdao.filter(enty, classNum, subject, enty, school);
             }
+
+            int enty = Integer.parseInt(entyStr);
+            Subject sub = sdao.get(subCd, school);
+
+            List<TestListSubject> sublist =  subldao.filter(enty, classNum, sub, school);
+            session.setAttribute("enty", enty);
+            session.setAttribute("classnum", classNum);
+            session.setAttribute("subt", sub);
+            session.setAttribute("school", school);
+
 
             System.out.println("[DEBUG]s:" + sList);
             System.out.println("[DEBUG]t:" + tList);

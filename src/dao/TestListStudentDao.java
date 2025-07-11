@@ -47,7 +47,7 @@ public class TestListStudentDao extends Dao {
             TestListStudent t = new TestListStudent();
             t.setSubjectName(rs.getString("subject_name"));
             t.setSubjectCd(rs.getString("subject_cd"));
-            t.setNo(rs.getInt("no"));  // ← 修正ここ
+            t.setNo(rs.getInt("no"));
             t.setPoint(rs.getInt("point"));
             list.add(t);
         }
