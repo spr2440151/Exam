@@ -60,7 +60,7 @@
           <option value="<%= classNum %>" <%= classNum.equals(f2) ? "selected" : "" %>><%= classNum %></option>
         <% } %>
       </select>
-    </div>
+    </div>　
 
     <!-- 科目 -->
     <div class="col-2">
