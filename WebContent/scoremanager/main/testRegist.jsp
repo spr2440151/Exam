@@ -90,29 +90,43 @@
       <p>科目：<%= tlist.get(0).getSubject().getName() %>（<%= tlist.get(0).getNo() %> 回）</p>
     </div>
 
-    <!-- 成績一覧テーブル -->
-    <table class="table table-bordered mt-3">
-      <thead>
-        <tr>
-          <th>入学年度</th>
-          <th>クラス</th>
-          <th>学生番号</th>
-          <th>氏名</th>
-          <th>点数</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (Test test : tlist) { %>
-          <tr>
-            <td><%= test.getStudent().getEntYear() %></td>
-            <td><%= test.getClassNum() %></td>
-            <td><%= test.getStudent().getNo() %></td>
-            <td><%= test.getStudent().getName() %></td>
-            <td><%= test.getPoint() %></td>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
+ <!-- 成績一覧テーブル -->
+<table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>入学年度</th>
+      <th>クラス</th>
+      <th>学生番号</th>
+      <th>氏名</th>
+      <th>点数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (tlist != null) {
+         for (Test test : tlist) { %>
+      <tr>
+        <td><%= test.getStudent().getEntYear() %></td>
+        <td><%= test.getClassNum() %></td>
+        <td><%= test.getStudent().getNo() %></td>
+        <td><%= test.getStudent().getName() %></td>
+        <td>
+          <input type="hidden" name="regist" value="<%= test.getStudent().getNo() %>" />
+          <input type="hidden" name="count" value="<%= f4 %>" />
+          <input type="hidden" name="subject" value="<%= f3 %>" />
+
+          <!-- 点数編集用のinput -->
+          <input type="hidden" name="studentNo" value="<%= test.getStudent().getNo() %>"/>
+          <input type="number" name="point" value="<%= test.getPoint() %>" min="0" max="100" class="form-control form-control-sm" />
+        </td>
+      </tr>
+    <%  }
+       } %>
+  </tbody>
+</table>
+
+<!-- 登録ボタン -->
+<button type="submit" class="btn btn-primary">登録して終了</button>
+
   <% } %>
 
   </c:param>
