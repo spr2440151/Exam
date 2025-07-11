@@ -91,6 +91,7 @@
     </div>
 
  <!-- 成績一覧テーブル -->
+ <form action="TestRegistExecute.action" method="post">
 <table class="table table-bordered mt-3">
   <thead>
     <tr>
@@ -128,6 +129,6 @@
 <button type="submit" class="btn btn-primary">登録して終了</button>
 
   <% } %>
-
+</form>
   </c:param>
 </c:import>
