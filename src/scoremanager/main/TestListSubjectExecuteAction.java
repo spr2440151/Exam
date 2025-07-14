@@ -1,6 +1,5 @@
 package scoremanager.main;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,8 @@ public class TestListSubjectExecuteAction extends Action {
             HttpSession session = req.getSession();
             SubjectDao sdao = new SubjectDao();
             ClassNumDao cdao = new ClassNumDao();
-
             TestListSubjectDao subldao = new TestListSubjectDao();
+
             Teacher teacher = (Teacher) session.getAttribute("user");
             School school = teacher.getSchool();
 
@@ -34,10 +33,6 @@ public class TestListSubjectExecuteAction extends Action {
             String classNum = req.getParameter("f2");
             String subCd = req.getParameter("f3");
 
-            System.out.println("[DEBUG]入学:" + entyStr);
-            System.out.println("[DEBUG]クラス:" + classNum);
-            System.out.println("[DEBUG]科目:" + subCd);
-
             // 入学年度リスト生成
             List<Integer> yearList = new ArrayList<>();
             int currentYear = LocalDate.now().getYear();
@@ -45,22 +40,25 @@ public class TestListSubjectExecuteAction extends Action {
                 yearList.add(i);
             }
 
-            // 学校に紐づく科目一覧取得
+            // 学校に紐づく科目・クラスリスト取得
             List<Subject> sList = sdao.filter(school);
-
-            // 学校に紐づくクラス一覧取得
             List<String> cList = cdao.filter(school);
 
-            // 検索条件がある場合のみテスト一覧を取得
-            if (entyStr != null && !entyStr.isEmpty() &&
-                classNum != null && !classNum.isEmpty() &&
-                subCd != null && !subCd.isEmpty()) {
+            // 条件チェック
+            if (entyStr == null || entyStr.isEmpty() ||
+                classNum == null || classNum.isEmpty() ||
+                subCd == null || subCd.isEmpty()) {
 
-            	System.out.println("if文チェック");
+                // 未入力ならエラーメッセージをリクエストスコープに格納
+                req.setAttribute("subjectError", "入学年度とクラスと科目を入力してください");
+
+            } else {
+                // 全て入力されていれば検索実行
                 int enty = Integer.parseInt(entyStr);
                 Subject sub = sdao.get(subCd, school);
 
                 List<TestListSubject> sublist =  subldao.filter(enty, classNum, sub, school);
+
                 session.setAttribute("enty", enty);
                 session.setAttribute("classnum", classNum);
                 session.setAttribute("subt", sub);
@@ -68,8 +66,7 @@ public class TestListSubjectExecuteAction extends Action {
                 session.setAttribute("subList", sublist);
             }
 
-            System.out.println("[DEBUG]s:" + sList);
-            System.out.println("[DEBUG]c:" + cList);
+            // 共通でセットするリスト
             session.setAttribute("yearList", yearList);
             session.setAttribute("sList", sList);
             session.setAttribute("cList", cList);

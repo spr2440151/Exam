@@ -1,7 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="bean.Test, bean.Subject, bean.Student, bean.TestListSubject, bean.TestListStudent, java.util.List" %>
-<%@page import="java.util.Set, java.util.LinkedHashSet" %>
 
 <%
     List<Test> tlist = (List<Test>) session.getAttribute("tList");
@@ -33,7 +32,6 @@
         <label class="col-form-label fw-bold">科目情報</label>
     </div>
 
-    <!-- 入学年度 -->
     <div class="col-auto">
         <label for="entYear" class="col-form-label">入学年度</label>
         <select id="entYear" name="f1" class="form-select">
@@ -51,7 +49,6 @@
         </select>
     </div>
 
-    <!-- クラス -->
     <div class="col-auto">
         <label for="classNum" class="col-form-label">クラス</label>
         <select id="classNum" name="f2" class="form-select">
@@ -62,7 +59,6 @@
         </select>
     </div>
 
-    <!-- 科目 -->
     <div class="col-auto">
         <label for="subCd" class="col-form-label">科目</label>
         <select id="subCd" name="f3" class="form-select">
@@ -73,13 +69,19 @@
         </select>
     </div>
 
-    <!-- 検索ボタン -->
     <div class="col-auto">
         <button type="submit" class="btn btn-secondary">科目検索</button>
     </div>
 </div>
 
 </form>
+
+<!-- エラーメッセージ（科目検索） -->
+<% if (request.getAttribute("subjectError") != null) { %>
+    <div class="mt-3">
+        <p class="text-danger"><%= request.getAttribute("subjectError") %></p>
+    </div>
+<% } %>
 
 <!-- 🔍 学生情報フォーム -->
 <form action="TestListStudentExecute.action" method="get" class="border p-3 mb-3 bg-light rounded">
@@ -89,13 +91,12 @@
         <label class="col-form-label fw-bold">学生情報</label>
     </div>
 
-    <!-- 学生番号 -->
     <div class="col-auto">
         <label for="studentNo" class="col-form-label">学生番号</label>
-        <input type="text" id="studentNo" name="f4" class="form-control" placeholder="学生番号を入力してください" value="${param.f4}">
+        <input type="text" id="studentNo" name="f4" class="form-control"
+               placeholder="学生番号を入力してください" value="${param.f4}" required>
     </div>
 
-    <!-- 検索ボタン -->
     <div class="col-auto">
         <button type="submit" class="btn btn-secondary">学生検索</button>
     </div>
@@ -103,95 +104,105 @@
 
 </form>
 
-
 <%
-boolean isSubjectSearch = (f1 != null && !f1.isEmpty()) ||
-                          (f2 != null && !f2.isEmpty()) ||
+boolean isSubjectSearch = (f1 != null && !f1.isEmpty()) &&
+                          (f2 != null && !f2.isEmpty()) &&
                           (f3 != null && !f3.isEmpty());
 
 boolean isStudentSearch = (f4 != null && !f4.isEmpty());
 %>
 
 <!-- 成績一覧（科目） -->
-<% if (isSubjectSearch && sublist != null && !sublist.isEmpty()) { %>
-    <div>
-    <p>科目：
-    <%
-        String subjectName = "";
-        if (f3 != null && !f3.isEmpty()) {
-            for (Subject sub : slist) {
-                if (sub.getCd().equals(f3)) {
-                    subjectName = sub.getName();
-                    break;
+<% if (isSubjectSearch) { %>
+
+    <% if (sublist != null && !sublist.isEmpty()) { %>
+
+        <div>
+        <p>科目：
+        <%
+            String subjectName = "";
+            if (f3 != null && !f3.isEmpty()) {
+                for (Subject sub : slist) {
+                    if (sub.getCd().equals(f3)) {
+                        subjectName = sub.getName();
+                        break;
+                    }
                 }
             }
-        }
-        out.print(subjectName);
-    %>
-    </p>
-    </div>
+            out.print(subjectName);
+        %>
+        </p>
+        </div>
 
-    <table class="table table-bordered mt-3">
-      <thead>
-        <tr>
-          <th>入学年度</th>
-          <th>クラス</th>
-          <th>学生番号</th>
-          <th>氏名</th>
-          <th>１回</th>
-          <th>２回</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (TestListSubject tlsub : sublist) { %>
-          <tr>
-            <td><%= tlsub.getEntYear() %></td>
-            <td><%= tlsub.getClassNum() %></td>
-            <td><%= tlsub.getStudentNo() %></td>
-            <td><%= tlsub.getStudentName() %></td>
-            <% for (int i = 1; i <= 2; i++) { %>
-              <% String point = tlsub.getPoint(i); %>
-              <td><%= (point != null) ? point : "-" %></td>
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>入学年度</th>
+              <th>クラス</th>
+              <th>学生番号</th>
+              <th>氏名</th>
+              <th>１回</th>
+              <th>２回</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (TestListSubject tlsub : sublist) { %>
+              <tr>
+                <td><%= tlsub.getEntYear() %></td>
+                <td><%= tlsub.getClassNum() %></td>
+                <td><%= tlsub.getStudentNo() %></td>
+                <td><%= tlsub.getStudentName() %></td>
+                <% for (int i = 1; i <= 2; i++) { %>
+                  <% String point = tlsub.getPoint(i); %>
+                  <td><%= (point != null) ? point : "-" %></td>
+                <% } %>
+              </tr>
             <% } %>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
-<% } else if (isStudentSearch && stulist != null && !stulist.isEmpty()) { %>
+          </tbody>
+        </table>
 
-<!-- 成績一覧（学生） -->
-    <div>
-      <p>氏名：<%=stu.getName() %>(<%=f4 %>)</p>
-    </div>
+    <% } else { %>
+        <div class="mt-3">
+          <p class="text-danger">学生情報が存在しませんでした。</p>
+        </div>
+    <% } %>
 
-    <table class="table table-bordered mt-3">
-      <thead>
-        <tr>
-          <th>科目名</th>
-          <th>科目コード</th>
-          <th>回数</th>
-          <th>点数</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (TestListStudent tlstu : stulist) { %>
-          <tr>
-            <td><%= tlstu.getSubjectName() %></td>
-            <td><%= tlstu.getSubjectCd() %></td>
-            <td><%= tlstu.getNum() %></td>
-            <td><%= tlstu.getPoint() %></td>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
-<% } else { %>
+<% } else if (isStudentSearch) { %>
 
-<!-- 検索結果なし -->
-<div class="mt-3">
-  <p class="text-danger">該当するデータがありませんでした。</p>
-</div>
+    <% if (stulist != null && !stulist.isEmpty()) { %>
+
+        <div>
+          <p>氏名：<%= stu.getName() %> (<%= f4 %>)</p>
+        </div>
+
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>科目名</th>
+              <th>科目コード</th>
+              <th>回数</th>
+              <th>点数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (TestListStudent tlstu : stulist) { %>
+              <tr>
+                <td><%= tlstu.getSubjectName() %></td>
+                <td><%= tlstu.getSubjectCd() %></td>
+                <td><%= tlstu.getNum() %></td>
+                <td><%= tlstu.getPoint() %></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+
+    <% } else { %>
+        <div class="mt-3">
+          <p class="text-danger">学生情報が存在しませんでした。</p>
+        </div>
+    <% } %>
 
 <% } %>
 
-  </c:param>
+</c:param>
 </c:import>
