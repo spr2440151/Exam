@@ -198,7 +198,7 @@ boolean isStudentSearch = (f4 != null && !f4.isEmpty());
 
     <% } else { %>
         <div class="mt-3">
-          <p class="text-danger">学生情報が存在しませんでした。</p>
+          <p class="text-danger">成績情報が存在しませんでした。</p>
         </div>
     <% } %>
 
