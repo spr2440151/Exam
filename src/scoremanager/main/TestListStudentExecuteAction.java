@@ -66,6 +66,7 @@ public class TestListStudentExecuteAction extends Action {
                 session.setAttribute("classnum", classNum);
                 session.setAttribute("school", school);
                 session.setAttribute("stuList", stulist);
+                session.setAttribute("student", stu);
             }
 
             System.out.println("[DEBUG]s:" + sList);
