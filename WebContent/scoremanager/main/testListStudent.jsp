@@ -200,6 +200,9 @@ boolean isStudentSearch = (f4 != null && !f4.isEmpty());
         </table>
 
     <% } else { %>
+    	<div>
+          <p>氏名：<%= stu.getName() %> (<%= f4 %>)</p>
+        </div>
         <div class="mt-3">
           <p class="text-danger">成績情報が存在しませんでした。</p>
         </div>
