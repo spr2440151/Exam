@@ -70,7 +70,7 @@
     </div>
 
     <div class="col-auto">
-        <button type="submit" class="btn btn-secondary">科目検索</button>
+        <button type="submit" class="btn btn-secondary">検索</button>
     </div>
 </div>
 
@@ -101,7 +101,7 @@
     </div>
 
     <div class="col-auto">
-        <button type="submit" class="btn btn-secondary">学生検索</button>
+        <button type="submit" class="btn btn-secondary">検索</button>
     </div>
 </div>
 
