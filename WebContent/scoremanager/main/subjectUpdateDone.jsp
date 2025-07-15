@@ -19,7 +19,7 @@
 		</div>
 		<div></div>
 		<br>
-		<a href="StudentList.action">科目一覧</a>
+		<a href="SubjectList.action">科目一覧</a>
 		</body>
 		</html>
 	</c:param>
