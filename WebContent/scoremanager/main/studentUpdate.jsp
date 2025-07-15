@@ -71,6 +71,7 @@
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
 	<a href="studentList.jsp" class="btn btn-link">戻る</a>
+	<!-- エラーチェック -->
 </form>
 </main>
 </body>
