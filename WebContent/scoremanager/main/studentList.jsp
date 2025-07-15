@@ -13,7 +13,7 @@
   <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">学生管理</h2>
 
 <div style="margin-top: 10px; margin-left: auto; width: fit-content; margin-right: 55px;">
-	<a href="SubjectCreate.action">新規登録</a>
+	<a href="StudentCreate.action">新規登録</a>
 </div>
 <br>
 
