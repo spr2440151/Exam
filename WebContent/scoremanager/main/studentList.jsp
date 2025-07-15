@@ -56,16 +56,10 @@
     </div>
   </form>
 
-  <!-- 件数表示 -->
-  <div>
-    <% if (list == null || list.isEmpty()) { %>
-      <p>学生情報が存在しませんでした。</p>
-    <% } else { %>
-      <p>検索結果：<%= list.size() %>件</p>
-    <% } %>
-  </div>
+<!-- 件数表示と学生一覧テーブル -->
+<% if (list != null && !list.isEmpty()) { %>
+  <p>検索結果：<%= list.size() %>件</p>
 
-  <!-- 学生一覧テーブル -->
   <table class="table table-bordered mt-3">
     <thead>
       <tr>
@@ -74,11 +68,11 @@
         <th>氏名</th>
         <th>クラス</th>
         <th>在学中</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
-      <% if (list != null) {
-           for (Student stu : list) { %>
+      <% for (Student stu : list) { %>
         <tr>
           <td><%= stu.getEntYear() %></td>
           <td><%= stu.getNo() %></td>
@@ -87,9 +81,12 @@
           <td><%= stu.isAttend() ? "○" : "×" %></td>
           <td><a href="StudentUpdate.action?id=<%=stu.getNo()%>" class="btn btn-sm btn-link">変更</a></td>
         </tr>
-      <% } } %>
+      <% } %>
     </tbody>
   </table>
+<% } else { %>
+  <p>学生情報が存在しませんでした。</p>
+<% } %>
 
-  </c:param>
+</c:param>
 </c:import>
