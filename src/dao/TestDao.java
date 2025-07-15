@@ -136,12 +136,7 @@ public class TestDao extends Dao {
 
             // Testの設定
             test.setNo(rs.getInt("test_no"));
-            int point = rs.getInt("point");
-            if (rs.wasNull()) {
-                test.setPoint(-1); // NULLは-1に置き換え
-            } else {
-                test.setPoint(point);
-            }
+            test.setPoint(rs.getInt("point"));
             test.setClassNum(rs.getString("test_class_num"));
             test.setSchool(school);
 
@@ -153,16 +148,10 @@ public class TestDao extends Dao {
     // 単一テストの更新用 save
     private boolean save(Test test, Connection con) throws Exception {
         String sql =
-            "UPDATE test SET point = ? " +
-            "WHERE student_no = ? AND subject_cd = ? AND school_cd = ? AND no = ? AND class_num = ?";
+        		"UPDATE test SET point = ? "
+        		+ "WHERE student_no = ? AND subject_cd = ? AND school_cd = ? AND no = ? AND class_num = ?";
         PreparedStatement st = con.prepareStatement(sql);
-
-        if (test.getPoint() != -1) {
-            st.setInt(1, test.getPoint());
-        } else {
-            st.setNull(1, java.sql.Types.INTEGER);
-        }
-
+        st.setInt(1, test.getPoint());
         st.setString(2, test.getStudent().getNo());
         st.setString(3, test.getSubject().getCd());
         st.setString(4, test.getSchool().getCd());

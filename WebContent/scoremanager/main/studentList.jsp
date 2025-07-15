@@ -68,7 +68,6 @@
         <th>氏名</th>
         <th>クラス</th>
         <th>在学中</th>
-        <th>操作</th>
       </tr>
     </thead>
     <tbody>

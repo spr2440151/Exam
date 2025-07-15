@@ -86,49 +86,85 @@
 
   <!-- 検索結果表示 -->
   <% if (tlist != null && !tlist.isEmpty()) { %>
+
     <div>
       <p>科目：<%= tlist.get(0).getSubject().getName() %>（<%= tlist.get(0).getNo() %> 回）</p>
     </div>
 
- <!-- 成績一覧テーブル -->
- <form action="TestRegistExecute.action" method="post">
-<table class="table table-bordered mt-3">
-  <thead>
-    <tr>
-      <th>入学年度</th>
-      <th>クラス</th>
-      <th>学生番号</th>
-      <th>氏名</th>
-      <th>点数</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if (tlist != null) {
-         for (Test test : tlist) { %>
-      <tr>
-        <td><%= test.getStudent().getEntYear() %></td>
-        <td><%= test.getClassNum() %></td>
-        <td><%= test.getStudent().getNo() %></td>
-        <td><%= test.getStudent().getName() %></td>
-        <td>
-          <input type="hidden" name="regist" value="<%= test.getStudent().getNo() %>" />
-          <input type="hidden" name="count" value="<%= f4 %>" />
-          <input type="hidden" name="subject" value="<%= f3 %>" />
+    <!-- 成績一覧テーブル -->
+    <form action="TestRegistExecute.action" method="post" onsubmit="return validatePoints();">
+      <table class="table table-bordered mt-3">
+        <thead>
+          <tr>
+            <th>入学年度</th>
+            <th>クラス</th>
+            <th>学生番号</th>
+            <th>氏名</th>
+            <th>点数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%
+            int index = 0;
+            for (Test test : tlist) {
+          %>
+          <tr>
+            <td><%= test.getStudent().getEntYear() %></td>
+            <td><%= test.getClassNum() %></td>
+            <td><%= test.getStudent().getNo() %></td>
+            <td><%= test.getStudent().getName() %></td>
+            <td>
+              <input type="hidden" name="regist" value="<%= test.getStudent().getNo() %>" />
+              <input type="hidden" name="count" value="<%= f4 %>" />
+              <input type="hidden" name="subject" value="<%= f3 %>" />
+              <input type="hidden" name="studentNo" value="<%= test.getStudent().getNo() %>"/>
 
-          <!-- 点数編集用のinput -->
-          <input type="hidden" name="studentNo" value="<%= test.getStudent().getNo() %>"/>
-          <input type="number" name="point" value="<%= test.getPoint() %>" min="0" max="100" class="form-control form-control-sm" />
-        </td>
-      </tr>
-    <%  }
-       } %>
-  </tbody>
-</table>
+              <input type="text" name="point" id="point_<%= index %>" value="<%= test.getPoint() %>"
+               class="form-control form-control-sm point-input" />
 
-<!-- 登録ボタン -->
-<button type="submit" class="btn btn-primary">登録して終了</button>
+              <div id="error_<%= index %>" class="text-danger mt-1" style="display:none;">
+                0～100の範囲で入力してください
+              </div>
+            </td>
+          </tr>
+          <%
+              index++;
+            } // for end
+          %>
+        </tbody>
+      </table>
 
-  <% } %>
-</form>
+      <button type="submit" class="btn btn-primary">登録して終了</button>
+    </form>
+
+<% } %>
+
+
+
+<script>
+// バリデーション関数
+function validatePoints() {
+    const points = document.getElementsByClassName('point-input');
+    let isValid = true;
+
+    for (let i = 0; i < points.length; i++) {
+        const input = points[i];
+        const errorDiv = document.getElementById('error_' + i);
+        const value = input.value.trim();
+
+        // 初期化
+        errorDiv.style.display = 'none';
+
+        // チェック
+        if (value === '' || isNaN(value) || value < 0 || value > 100) {
+            errorDiv.style.display = 'block';
+            isValid = false;
+        }
+    }
+
+    return isValid;
+}
+</script>
+
   </c:param>
 </c:import>

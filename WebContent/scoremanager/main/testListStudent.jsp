@@ -24,8 +24,8 @@
 
 <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
-<!-- 🔍 科目情報フォーム -->
-<form method="get" class="border p-3 mb-3 bg-light rounded">
+<!-- 🔍 科目検索フォーム -->
+<form method="get" action="TestListSubjectExecute.action" class="border p-3 mb-3 bg-light rounded">
 
 <div class="row g-3 align-items-center mb-3">
     <div class="col-auto">
@@ -74,7 +74,6 @@
     </div>
 </div>
 
-
 <!-- エラーメッセージ（科目検索） -->
 <% if (request.getAttribute("subjectError") != null) { %>
     <div class="mt-3">
@@ -82,10 +81,14 @@
     </div>
 <% } %>
 
-<!-- 水平線 -->
-    <hr class="my-4">
+</form>
 
-<!-- 🔍 学生情報フォーム -->
+<!-- 水平線 -->
+<hr class="my-4">
+
+<!-- 🔍 学生検索フォーム -->
+<form method="get" action="TestListStudentExecute.action" class="border p-3 mb-3 bg-light rounded">
+
 <div class="row g-3 align-items-center">
     <div class="col-auto">
         <label class="col-form-label fw-bold">学生情報</label>
@@ -101,8 +104,8 @@
         <button type="submit" class="btn btn-secondary">学生検索</button>
     </div>
 </div>
-</form>
 
+</form>
 
 <%
 boolean isSubjectSearch = (f1 != null && !f1.isEmpty()) &&

@@ -64,6 +64,7 @@ public class TestListSubjectExecuteAction extends Action {
                 session.setAttribute("subt", sub);
                 session.setAttribute("school", school);
                 session.setAttribute("subList", sublist);
+                session.removeAttribute("stuList");
             }
 
             // 共通でセットするリスト

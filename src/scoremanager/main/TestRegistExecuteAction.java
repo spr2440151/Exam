@@ -51,12 +51,12 @@ public class TestRegistExecuteAction extends Action {
 
             int no = Integer.parseInt(numStrArray[i]);
 
-            int point = -1; // -1 を「未入力」とする
+            Integer point = null; // 初期値null
             if (pointStrArray[i] != null && !pointStrArray[i].isEmpty()) {
                 try {
                     point = Integer.parseInt(pointStrArray[i]);
                 } catch (NumberFormatException e) {
-                    point = -1;
+                    point = null; // 無効な入力はnull扱い
                 }
             }
 

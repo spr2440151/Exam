@@ -107,40 +107,5 @@
     科目情報または学生情報を入力して検索ボタンをクリックしてください
   </label>
 
-  <!-- 検索結果表示 -->
-  <% if (sublist != null && !sublist.isEmpty()) { %>
-    <div>
-      <p>科目：科目名></p>
-    </div>
-
-    <!-- 成績一覧テーブル -->
-    <table class="table table-bordered mt-3">
-      <thead>
-        <tr>
-          <th>入学年度</th>
-          <th>クラス</th>
-          <th>学生番号</th>
-          <th>氏名</th>
-          <th>１回</th>
-          <th>２回</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (TestListSubject tlsub : sublist) { %>
-          <tr>
-            <td><%= tlsub.getEntYear() %></td>
-            <td><%= tlsub.getClassNum() %></td>
-            <td><%= tlsub.getStudentNo() %></td>
-            <td><%= tlsub.getStudentName() %></td>
-            <% for (int i = 1; i <= 2; i++) { %>
-              <% String point = tlsub.getPoint(i); %>
-              <td><%= (point != null) ? point : "-" %></td>
-            <% } %>
-          </tr>
-        <% } %>
-      </tbody>
-    </table>
-  <% } %>
-
   </c:param>
 </c:import>
