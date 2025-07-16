@@ -19,7 +19,7 @@
 		</div>
 		<div></div>
 		<br>
-		<a href="TestRegist.action">戻る</a><a href="TestList.action">成績参照</a>
+		<a href="TestRegist.action">戻る</a>   <a href="TestList.action">成績参照</a>
 		</body>
 		</html>
 	</c:param>

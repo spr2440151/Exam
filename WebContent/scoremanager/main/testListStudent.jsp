@@ -24,88 +24,93 @@
 
 <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
-<!-- 🔍 科目検索フォーム -->
-<form method="get" action="TestListSubjectExecute.action" class="border p-3 mb-3 bg-light rounded">
+<!-- 共通枠組み -->
+<div class="border p-3 mb-3 bg-light rounded">
 
-<div class="row g-3 align-items-center mb-3">
-    <div class="col-auto">
+  <!-- 科目検索フォーム -->
+  <form method="get" action="TestListSubjectExecute.action" class="mb-3">
+
+    <div class="row g-3 align-items-center mb-3">
+      <div class="col-2">
         <label class="col-form-label fw-bold">科目情報</label>
-    </div>
+      </div>
 
-    <div class="col-auto">
+      <div class="col-2">
         <label for="entYear" class="col-form-label">入学年度</label>
         <select id="entYear" name="f1" class="form-select">
-            <option value="">--------</option>
-            <c:forEach var="year" items="${yearList}">
-                <c:choose>
-                    <c:when test="${year == param.f1}">
-                        <option value="${year}" selected>${year}</option>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${year}">${year}</option>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
+          <option value="">--------</option>
+          <c:forEach var="year" items="${yearList}">
+            <c:choose>
+              <c:when test="${year == param.f1}">
+                <option value="${year}" selected>${year}</option>
+              </c:when>
+              <c:otherwise>
+                <option value="${year}">${year}</option>
+              </c:otherwise>
+            </c:choose>
+          </c:forEach>
         </select>
-    </div>
+      </div>
 
-    <div class="col-auto">
+      <div class="col-auto">
         <label for="classNum" class="col-form-label">クラス</label>
         <select id="classNum" name="f2" class="form-select">
-            <option value="">--------</option>
-            <% for (String classNum : clist) { %>
-                <option value="<%= classNum %>" <%= classNum.equals(f2) ? "selected" : "" %>><%= classNum %></option>
-            <% } %>
+          <option value="">--------</option>
+          <% for (String classNum : clist) { %>
+            <option value="<%= classNum %>" <%= classNum.equals(f2) ? "selected" : "" %>><%= classNum %></option>
+          <% } %>
         </select>
-    </div>
+      </div>
 
-    <div class="col-auto">
+      <div class="col-4">
         <label for="subCd" class="col-form-label">科目</label>
         <select id="subCd" name="f3" class="form-select">
-            <option value="">--------</option>
-            <% for (Subject sub : slist) { %>
-                <option value="<%= sub.getCd() %>" <%= sub.getCd().equals(f3) ? "selected" : "" %>><%= sub.getName() %></option>
-            <% } %>
+          <option value="">--------</option>
+          <% for (Subject sub : slist) { %>
+            <option value="<%= sub.getCd() %>" <%= sub.getCd().equals(f3) ? "selected" : "" %>><%= sub.getName() %></option>
+          <% } %>
         </select>
-    </div>
+      </div>
+      <div class="col-auto"></div>
 
-    <div class="col-auto">
+      <div class="col-auto">
         <button type="submit" class="btn btn-secondary">検索</button>
+      </div>
     </div>
-</div>
 
-<!-- エラーメッセージ（科目検索） -->
-<% if (request.getAttribute("subjectError") != null) { %>
-    <div class="mt-3">
+    <!-- エラーメッセージ（科目検索） -->
+    <% if (request.getAttribute("subjectError") != null) { %>
+      <div class="mt-3">
         <p class="text-danger"><%= request.getAttribute("subjectError") %></p>
-    </div>
-<% } %>
+      </div>
+    <% } %>
 
-</form>
+  </form>
 
-<!-- 水平線 -->
-<hr class="my-4">
+  <hr class="my-4">
 
-<!-- 🔍 学生検索フォーム -->
-<form method="get" action="TestListStudentExecute.action" class="border p-3 mb-3 bg-light rounded">
+  <!-- 学生検索フォーム -->
+  <form method="get" action="TestListStudentExecute.action">
 
-<div class="row g-3 align-items-center">
-    <div class="col-auto">
+    <div class="row g-3 align-items-center">
+      <div class="col-2">
         <label class="col-form-label fw-bold">学生情報</label>
-    </div>
+      </div>
 
-    <div class="col-auto">
+      <div class="col-4">
         <label for="studentNo" class="col-form-label">学生番号</label>
         <input type="text" id="studentNo" name="f4" class="form-control"
                placeholder="学生番号を入力してください" value="${param.f4}" required>
-    </div>
+      </div>
+      <div class="col-auto"></div>
 
-    <div class="col-auto">
+      <div class="col-auto">
         <button type="submit" class="btn btn-secondary">検索</button>
+      </div>
     </div>
-</div>
 
-</form>
+  </form>
+</div>
 
 <%
 boolean isSubjectSearch = (f1 != null && !f1.isEmpty()) &&
