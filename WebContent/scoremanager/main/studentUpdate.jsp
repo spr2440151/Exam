@@ -64,7 +64,6 @@
 	           for (String classNum : classSet) { %>
 	<option><%= classNum %></option>
 	<% } %>
-
 	</select>
 	<div>
 	 <input type="checkbox" name="isAttend" id="id" checked value="True" />在学中
