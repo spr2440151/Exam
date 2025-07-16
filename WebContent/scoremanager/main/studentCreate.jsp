@@ -46,9 +46,9 @@
         <input
             type="text"
             name="no"
-            value="${o}"n
+            value="${o}"
             style="width:100%;"
-            maxlength="20"
+            maxlength="10"
             placeholder="学生番号を入力してください"
             required /><br>
         <c:if test="${not empty duplicateError}">
