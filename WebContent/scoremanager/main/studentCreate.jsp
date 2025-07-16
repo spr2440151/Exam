@@ -45,8 +45,8 @@
         <label>学生番号</label><br>
         <input
             type="text"
-            name="studentNo"
-            value="${studentNo}"
+            name="no"
+            value="${o}"n
             style="width:100%;"
             maxlength="20"
             placeholder="学生番号を入力してください"
@@ -60,8 +60,8 @@
         <label>氏名</label><br>
         <input
             type="text"
-            name="studentName"
-            value="${studentName}"
+            name="name"
+            value="${name}"
             style="width:100%;"
             maxlength="50"
             placeholder="氏名を入力してください"

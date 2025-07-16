@@ -21,8 +21,8 @@ public class StudentCreateExecuteAction extends Action {
         // ローカル変数の宣言
         String url = "";
         int entYear = 0;
-        String studentNo = "";
-        String studentName = "";
+        String no = "";
+        String name = "";
         String classNum = "";
 
         // リクエストパラメータ―の取得
@@ -31,8 +31,8 @@ public class StudentCreateExecuteAction extends Action {
         } catch (NumberFormatException e) {
             entYear = 0;
         }
-        studentNo = req.getParameter("studentNo"); // 学生番号
-        studentName = req.getParameter("studentName"); // 学生名
+        no = req.getParameter("no"); // 学生番号
+        name = req.getParameter("name"); // 学生名
         classNum = req.getParameter("classNum"); // クラス
 
         // DBからデータ取得
@@ -40,7 +40,7 @@ public class StudentCreateExecuteAction extends Action {
         StudentDao dao = new StudentDao();
         Teacher teacher = (Teacher) session.getAttribute("user");
         School school = teacher.getSchool();
-        Student stu = dao.get(studentNo);
+        Student stu = dao.get(no);
 
         List<String> errors = new ArrayList<>();
 
@@ -61,8 +61,8 @@ public class StudentCreateExecuteAction extends Action {
 
             // 入力値をリクエストスコープに保存
             List yearList = (List) session.getAttribute("yearList");
-            req.setAttribute("studentNo", studentNo);
-            req.setAttribute("studentName", studentName);
+            req.setAttribute("no", no);
+            req.setAttribute("name", name);
             req.setAttribute("classNum", classNum);
             req.setAttribute("entYear", entYear); // 入学年度も保存
             req.setAttribute("yearList", yearList);
@@ -78,8 +78,8 @@ public class StudentCreateExecuteAction extends Action {
             stu = new Student();
         }
 
-        stu.setNo(studentNo);
-        stu.setName(studentName);
+        stu.setNo(no);
+        stu.setName(name);
         stu.setEntYear(entYear);
         stu.setClassNum(classNum);
         stu.setAttend(true);
