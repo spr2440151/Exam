@@ -31,7 +31,7 @@
 <form action="StudentUpdateExecute.action" method="get">
 	<div class="mb-3">
 		<label for="id" class="form-label">入学年度</label>
-			<input type="text" name="year" id="id" class="form-control" value="${student.entYear}" readonly>
+			<input type="text" name="ent_year" id="id" class="form-control" value="${student.entYear}" readonly>
 	</div>
 
 	<div class="mb-3">
@@ -68,7 +68,7 @@
 	<div>
 	 <input type="checkbox" name="isAttend" id="id" checked value="True" />在学中
 	 </div>
-	<button type="submit" class="btn btn-primary">変更</button>
+	<button type="submit" name="login" class="btn btn-primary">変更</button>
 	<br>
 	<a href="studentList.jsp" class="btn btn-link">戻る</a>
 	<!-- エラーチェック -->
