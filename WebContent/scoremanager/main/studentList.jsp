@@ -12,13 +12,16 @@
 
   <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">学生管理</h2>
 
-<div style="margin-top: 10px; margin-left: auto; width: fit-content; margin-right: 55px;">
-	<a href="StudentCreate.action">新規登録</a>
+<div class="text-end mb-2">
+  <a href="StudentCreate.action">新規登録</a>
 </div>
+
+
 <br>
 
   <!-- 🔍 検索フォーム -->
-  <form action="StudentList.action" method="get" class="border p-3 mb-3 bg-light rounded">
+  <form action="StudentList.action" method="get" class="border p-3 mb-3 rounded">
+
     <div class="row g-3 align-items-center">
       <div class="col-4">
         <label for="entYear" class="col-form-label">入学年度</label>
@@ -55,19 +58,18 @@
       </div>
     </div>
   </form>
-
 <!-- 件数表示と学生一覧テーブル -->
 <% if (list != null && !list.isEmpty()) { %>
   <p>検索結果：<%= list.size() %>件</p>
 
-  <table class="table table-bordered mt-3">
+  <table class="table mt-3 no-vertical-borders">
     <thead>
       <tr>
         <th>入学年度</th>
         <th>学籍番号</th>
         <th>氏名</th>
         <th>クラス</th>
-        <th>在学中</th>
+        <th class="text-center">在学中</th>
       </tr>
     </thead>
     <tbody>
@@ -77,7 +79,8 @@
           <td><%= stu.getNo() %></td>
           <td><%= stu.getName() %></td>
           <td><%= stu.getClassNum() %></td>
-          <td><%= stu.isAttend() ? "○" : "×" %></td>
+          <td class="text-center"><%= stu.isAttend() ? "○" : "×" %></td>
+
           <td><a href="StudentUpdate.action?id=<%=stu.getNo()%>" class="btn btn-sm btn-link">変更</a></td>
         </tr>
       <% } %>
@@ -89,3 +92,5 @@
 
 </c:param>
 </c:import>
+
+

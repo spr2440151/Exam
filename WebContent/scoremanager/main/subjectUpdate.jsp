@@ -27,7 +27,7 @@
 <form action="SubjectUpdateExecute.action" method="get">
 	<div class="mb-3">
 		<label for="id" class="form-label">科目コード</label>
-			<input type="text" name="id" id="id" class="form-control" value="${subject.cd}" readonly>
+			<input type="text" name="cd" id="id" class="form-control" value="${subject.cd}" readonly>
 	</div>
 	        <!-- メッセージ表示 -->
 	<c:if test="${errors.size()>0}">

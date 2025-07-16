@@ -19,7 +19,7 @@ public class SubjectUpdateExecuteAction extends Action {
 
 		SubjectDao dao = new SubjectDao();
 
-		String cd = req.getParameter("id");
+		String cd = req.getParameter("cd");
     	String name = req.getParameter("name");
     	School school = (School)req.getAttribute("school");
     	Subject sub = new Subject();
@@ -43,7 +43,6 @@ public class SubjectUpdateExecuteAction extends Action {
 		} else {
 			sub.setCd(cd);
 			sub.setName(name);
-			//sub.setSchool(school);
 			dao.save(sub);
 			//リダイレクト
 			url = "subjectUpdateDone.jsp";
