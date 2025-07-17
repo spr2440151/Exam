@@ -38,14 +38,14 @@ public class SubjectUpdateExecuteAction extends Action {
 			req.setAttribute("name", name);
 
 			//フォワード
-			url = "subjectUpdate.jsp";
+			url = "subject_update.jsp";
 			req.getRequestDispatcher(url).forward(req, res);
 		} else {
 			sub.setCd(cd);
 			sub.setName(name);
 			dao.save(sub);
 			//リダイレクト
-			url = "subjectUpdateDone.jsp";
+			url = "subject_update_done.jsp";
 			res.sendRedirect(url);
 		}
     }
