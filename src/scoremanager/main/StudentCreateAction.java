@@ -18,7 +18,7 @@ public class StudentCreateAction extends Action {
 			//ローカル変数の宣言 1
 			String url = "";
 
-			url = "studentCreate.jsp";
+			url = "student_create.jsp";
 
 			List<Integer> yearList = new ArrayList<>();
 			LocalDate localDate = LocalDate.now();

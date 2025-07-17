@@ -36,7 +36,7 @@ public class SubjectDeleteAction extends Action {
 
 			sub.setSchool(school);
 
-			url = "subjectDelete.jsp";
+			url = "subject_delete.jsp";
 
 			req.setAttribute("subject", sub);
 

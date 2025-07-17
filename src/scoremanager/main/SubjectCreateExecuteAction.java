@@ -52,7 +52,7 @@ public class SubjectCreateExecuteAction extends Action {
 			req.setAttribute("name", name);
 
 			//フォワード
-			url = "subjectCreate.jsp";
+			url = "subject_create.jsp";
 			req.getRequestDispatcher(url).forward(req, res);
 		} else if (cd.equals(sub.getCd())) {// 認証失敗の場合
 			// エラーメッセージをセット
@@ -64,7 +64,7 @@ public class SubjectCreateExecuteAction extends Action {
 			req.setAttribute("name", name);
 
 			//フォワード
-			url = "subjectCreate.jsp";
+			url = "subject_create.jsp";
 			req.getRequestDispatcher(url).forward(req, res);
 		} else {
 			sub.setCd(cd);
@@ -72,7 +72,7 @@ public class SubjectCreateExecuteAction extends Action {
 			sub.setSchool(school);
 			dao.save(sub);
 			//リダイレクト
-			url = "subjectCreateDone.jsp";
+			url = "subject_create_done.jsp";
 			res.sendRedirect(url);
 		}
 

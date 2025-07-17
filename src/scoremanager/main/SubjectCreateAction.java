@@ -14,7 +14,7 @@ public class SubjectCreateAction extends Action {
 			//ローカル変数の宣言 1
 			String url = "";
 
-			url = "subjectCreate.jsp";
+			url = "subject_dreate.jsp";
 
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {

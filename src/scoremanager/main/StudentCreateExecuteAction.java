@@ -68,7 +68,7 @@ public class StudentCreateExecuteAction extends Action {
             req.setAttribute("yearList", yearList);
 
             // フォワード
-            url = "studentCreate.jsp";
+            url = "student_create.jsp";
             req.getRequestDispatcher(url).forward(req, res);
             return;
         }
@@ -87,7 +87,7 @@ public class StudentCreateExecuteAction extends Action {
         dao.save(stu);
 
         // リダイレクト
-        url = "studentCreateDone.jsp";
+        url = "student_createDone.jsp";
         res.sendRedirect(url);
     }
 
