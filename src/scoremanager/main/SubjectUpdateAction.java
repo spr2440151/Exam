@@ -25,7 +25,7 @@ public class SubjectUpdateAction extends Action {
 		try {
 			Subject sub = dao.get(cd, school);
 			sub.setSchool(school);
-			url = "subjectUpdate.jsp";
+			url = "subject_update.jsp";
 			req.setAttribute("subject", sub);
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {

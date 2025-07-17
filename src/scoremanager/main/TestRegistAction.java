@@ -120,7 +120,7 @@ public class TestRegistAction extends Action {
             }
             session.setAttribute("tList", tList);
 
-            req.getRequestDispatcher("testRegist.jsp").forward(req, res);
+            req.getRequestDispatcher("test_regist.jsp").forward(req, res);
 
         } catch (Exception e) {
             e.printStackTrace();

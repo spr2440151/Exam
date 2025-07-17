@@ -46,7 +46,7 @@
         <input
             type="text"
             name="no"
-            value="${o}"
+            value="${no}"
             style="width:100%;"
             maxlength="10"
             placeholder="学生番号を入力してください"

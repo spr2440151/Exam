@@ -76,6 +76,6 @@ public class TestRegistExecuteAction extends Action {
         tdao.save(list);
 
         // リダイレクト
-        res.sendRedirect("testRegistDone.jsp");
+        res.sendRedirect("test_regist_done.jsp");
     }
 }
