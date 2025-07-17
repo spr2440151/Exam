@@ -28,7 +28,7 @@ public class SubjectDeleteExecuteAction extends Action {
 		dao.delete(sub);
 
 		//リダイレクト
-		url = "subjectDeleteDone.jsp";
+		url = "subject_delete_done.jsp";
 		res.sendRedirect(url);
 
 

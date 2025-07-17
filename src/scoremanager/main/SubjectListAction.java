@@ -36,7 +36,7 @@ public class SubjectListAction extends Action {
 
 			session.setAttribute("list", list);
 
-			url = "subjectList.jsp";
+			url = "subject_list.jsp";
 
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {

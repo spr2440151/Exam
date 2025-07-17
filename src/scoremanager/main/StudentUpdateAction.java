@@ -25,7 +25,7 @@ public class StudentUpdateAction extends Action {
 		try {
 			Student  stu = dao.get(no);
 			stu.setSchool(school);
-			url = "studentUpdate.jsp";
+			url = "student_update.jsp";
 			req.setAttribute("student", stu);
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {

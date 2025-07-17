@@ -39,7 +39,7 @@ public class StudentUpdateExecuteAction extends Action {
 			req.setAttribute("name", name);
 
 			//フォワード
-			url = "StudentUpdate.jsp";
+			url = "student_update.jsp";
 			req.getRequestDispatcher(url).forward(req, res);
 		} else {
 			stu.setNo(req.getParameter("no"));
@@ -49,7 +49,7 @@ public class StudentUpdateExecuteAction extends Action {
 			stu.setAttend(attend);
 			dao.save(stu);
 			//リダイレクト
-			url = "studentUpdateDone.jsp";
+			url = "student_update_done.jsp";
 			res.sendRedirect(url);
 		}
     }

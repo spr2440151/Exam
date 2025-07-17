@@ -51,7 +51,7 @@ public class StudentListAction extends Action {
 
 			session.setAttribute("yearList", yearList);
 			session.setAttribute("list", list);
-			req.getRequestDispatcher("studentList.jsp").forward(req, res);
+			req.getRequestDispatcher("student_list.jsp").forward(req, res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
