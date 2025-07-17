@@ -87,7 +87,7 @@ public class StudentCreateExecuteAction extends Action {
         dao.save(stu);
 
         // リダイレクト
-        url = "student_createDone.jsp";
+        url = "student_create_done.jsp";
         res.sendRedirect(url);
     }
 
