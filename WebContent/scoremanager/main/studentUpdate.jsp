@@ -70,7 +70,7 @@
 	 </div>
 	<button type="submit" name="login" class="btn btn-primary">変更</button>
 	<br>
-	<a href="studentList.jsp" class="btn btn-link">戻る</a>
+	<a href="student_list.jsp" class="btn btn-link">戻る</a>
 	<!-- エラーチェック -->
 </form>
 </main>

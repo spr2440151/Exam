@@ -43,7 +43,7 @@
 	</div>
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
-	<a href="subjectList.jsp" class="btn btn-link">戻る</a>
+	<a href="subject_list.jsp" class="btn btn-link">戻る</a>
 </form>
 </main>
 </body>
