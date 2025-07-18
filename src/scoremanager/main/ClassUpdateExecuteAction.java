@@ -19,7 +19,7 @@ public class ClassUpdateExecuteAction extends Action {
 		HttpSession session=req.getSession();
 
 		String clsnum = req.getParameter("classNum");
-    	School school = (School)req.getAttribute("school");
+    	School school = (School)session.getAttribute("school");
     	ClassNum cls = new ClassNum();
     	String num = (String)session.getAttribute("num");
     	String url ="";

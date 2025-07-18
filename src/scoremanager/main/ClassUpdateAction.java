@@ -24,6 +24,7 @@ public class ClassUpdateAction extends Action {
 		System.out.println(clnum);
 		try {
 			url = "class_update.jsp";
+			session.setAttribute("school", school);
 			session.setAttribute("num", clnum);
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {

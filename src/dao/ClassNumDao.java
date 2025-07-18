@@ -82,9 +82,8 @@ public class ClassNumDao extends Dao {
 	    // 新しいクラス番号
 	    String class_num = classNum.getClass_num();
 
-	    // 主キー（class_num）が変更されていない場合 → MERGEでUPSERT
 	    if (num.equals(class_num)) {
-	        // MERGE文は、既にデータがあれば更新、なければ挿入を行う
+	        // 既にデータがあれば更新、なければ挿入を行う
 	        String sql = "MERGE INTO class_num (school_cd, class_num) " +
 	                     "KEY (school_cd, class_num) " +
 	                     "VALUES (?, ?)";
@@ -92,19 +91,19 @@ public class ClassNumDao extends Dao {
 	        try (PreparedStatement st = con.prepareStatement(sql)) {
 	            st.setString(1, school_cd);
 	            st.setString(2, class_num);
-	            System.out.println("MERGE（更新または挿入）実行");
+	            System.out.println("MERGE実行");
 
 	            result = st.executeUpdate() > 0;
 	        }
 	    } else {
-	        // 主キー（class_num）が変更されている場合 → DELETE + INSERT
+	        // class_numが変更されている場合 → DELETE + INSERT
 
-	        // まず旧クラス番号でDELETE
+	        // 旧クラス番号でDELETE
 	        String deleteSql = "DELETE FROM class_num WHERE school_cd = ? AND class_num = ?";
 	        try (PreparedStatement st = con.prepareStatement(deleteSql)) {
 	            st.setString(1, school_cd);
 	            st.setString(2, num);
-	            System.out.println("DELETE実行（主キー変更対応）");
+	            System.out.println("DELETE");
 	            st.executeUpdate();
 	        }
 
@@ -113,7 +112,7 @@ public class ClassNumDao extends Dao {
 	        try (PreparedStatement st = con.prepareStatement(insertSql)) {
 	            st.setString(1, school_cd);
 	            st.setString(2, class_num);
-	            System.out.println("INSERT実行（主キー変更対応）");
+	            System.out.println("INSERT");
 
 	            result = st.executeUpdate() > 0;
 	        }
