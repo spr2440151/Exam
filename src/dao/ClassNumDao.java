@@ -125,4 +125,27 @@ public class ClassNumDao extends Dao {
 	    return result;
 	}
 
+	public boolean delete(ClassNum classNum) throws Exception {
+	    boolean result = false;
+
+	    Connection con = getConnection();
+
+	    PreparedStatement st = con.prepareStatement(
+	        "DELETE FROM class_num WHERE class_num = ? AND school_cd = ?"
+	    );
+	    School school = classNum.getSchool();
+	    String school_cd = school.getCd();
+	    st.setString(1, classNum.getClass_num());
+	    st.setString(2, school_cd);
+
+	    int rows = st.executeUpdate();
+	    System.out.println(rows);
+	    result = rows < 0;
+
+	    st.close();
+	    con.close();
+
+	    return result;
+	}
+
 }
