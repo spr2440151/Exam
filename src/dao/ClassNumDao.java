@@ -27,7 +27,7 @@ public class ClassNumDao extends Dao {
 
 	    if (rs.next()) {
 	        cln = new ClassNum();
-	        school.setCd(rs.getString("school_cd")); // 必要であれば
+	        school.setCd(rs.getString("school_cd"));
 	        cln.setSchool(school);
 	        cln.setClass_num(rs.getString("class_num"));
 	    }

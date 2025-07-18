@@ -43,7 +43,7 @@ public class ClassCreateExecuteAction extends Action {
 
         // バリデーション
         if (cd == null || cd.length() != 3) {
-            errors.add("クラス番号は3文字で入力してください");
+            errors.add("クラス番号3文字で入力してください");
         } else if (classNum != null && classNum.getClass_num() != null) {
             errors.add("クラス番号が重複しています");
         }
