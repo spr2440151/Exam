@@ -72,48 +72,59 @@ public class ClassNumDao extends Dao {
 	public boolean save(ClassNum classNum, String num) throws Exception {
 	    boolean result = false;
 
+	    // データベース接続取得
 	    Connection con = getConnection();
 
-	    // cdチェック
-	    PreparedStatement checkSt = con.prepareStatement(
-	    		"SELECT COUNT(*) FROM class_num WHERE class_num = ?");
-	    checkSt.setString(1, classNum.getClass_num());
-	    ResultSet rs = checkSt.executeQuery();
-
-	    boolean exists = false;
-	    if (rs.next()) {
-	        exists = rs.getInt(1) > 0;
-	    }
-	    rs.close();
-	    checkSt.close();
-
-	    PreparedStatement st;
+	    // Schoolオブジェクトから学校コード取得
 	    School school = classNum.getSchool();
-        String school_cd = school.getCd();
+	    String school_cd = school.getCd();
 
-	    if (exists) {
-	        // 更新処理
-	        st = con.prepareStatement("UPDATE class_num SET class_num = ? WHERE class_num = ? AND school_cd = ?");
-	        System.out.println("更新");
-	        st.setString(1, classNum.getClass_num());
-	        st.setString(2, num);
-	        st.setString(3, school_cd);
+	    // 新しいクラス番号
+	    String class_num = classNum.getClass_num();
+
+	    // 主キー（class_num）が変更されていない場合 → MERGEでUPSERT
+	    if (num.equals(class_num)) {
+	        // MERGE文は、既にデータがあれば更新、なければ挿入を行う
+	        String sql = "MERGE INTO class_num (school_cd, class_num) " +
+	                     "KEY (school_cd, class_num) " +
+	                     "VALUES (?, ?)";
+
+	        try (PreparedStatement st = con.prepareStatement(sql)) {
+	            st.setString(1, school_cd);
+	            st.setString(2, class_num);
+	            System.out.println("MERGE（更新または挿入）実行");
+
+	            result = st.executeUpdate() > 0;
+	        }
 	    } else {
-	        // 挿入処理
-	        st = con.prepareStatement("INSERT INTO class_num (school_cd, class_num) VALUES (?, ?)");
-	        System.out.println("挿入");
-	        st.setString(1, school_cd);
-	        st.setString(2, classNum.getClass_num());
+	        // 主キー（class_num）が変更されている場合 → DELETE + INSERT
+
+	        // まず旧クラス番号でDELETE
+	        String deleteSql = "DELETE FROM class_num WHERE school_cd = ? AND class_num = ?";
+	        try (PreparedStatement st = con.prepareStatement(deleteSql)) {
+	            st.setString(1, school_cd);
+	            st.setString(2, num);
+	            System.out.println("DELETE実行（主キー変更対応）");
+	            st.executeUpdate();
+	        }
+
+	        // 新しいクラス番号でINSERT
+	        String insertSql = "INSERT INTO class_num (school_cd, class_num) VALUES (?, ?)";
+	        try (PreparedStatement st = con.prepareStatement(insertSql)) {
+	            st.setString(1, school_cd);
+	            st.setString(2, class_num);
+	            System.out.println("INSERT実行（主キー変更対応）");
+
+	            result = st.executeUpdate() > 0;
+	        }
 	    }
 
-	    int rows = st.executeUpdate();
-	    result = rows > 0;
-
-	    st.close();
+	    // データベース接続を閉じる
 	    con.close();
 
 	    return result;
 	}
+
 
 	public boolean delete(ClassNum classNum) throws Exception {
 	    boolean result = false;
