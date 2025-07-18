@@ -12,34 +12,33 @@ import bean.School;
 public class ClassNumDao extends Dao {
 	public ClassNum get(String class_num ,School school) throws Exception {
 
-		// データベース接続取得
-		Connection con = getConnection();
+	    Connection con = getConnection();
 
-		// SQL文の準備
-		PreparedStatement st = con.prepareStatement(
-			"SELECT * FROM class_num WHERE school_cd = ? AND class_num = ?");
+	    PreparedStatement st = con.prepareStatement(
+	        "SELECT * FROM class_num WHERE school_cd = ? AND class_num = ?");
 
-		String s_cd = school.getCd();
-		st.setString(1, s_cd);
-		st.setString(2, class_num);
+	    String s_cd = school.getCd();
+	    st.setString(1, s_cd);
+	    st.setString(2, class_num);
 
-		// SQL実行
-		ResultSet rs = st.executeQuery();
+	    ResultSet rs = st.executeQuery();
 
-		// 検索結果を変数に追加
-		ClassNum cln = new ClassNum();
-		school.setCd(rs.getString("school_cd"));
-		while (rs.next()) {
-			cln.setSchool(school);
-			cln.setClass_num(class_num);
-		}
+	    ClassNum cln = null;
 
-		rs.close();
-		st.close();
-		con.close();
+	    if (rs.next()) {
+	        cln = new ClassNum();
+	        school.setCd(rs.getString("school_cd")); // 必要であれば
+	        cln.setSchool(school);
+	        cln.setClass_num(rs.getString("class_num"));
+	    }
 
-		return cln;
+	    rs.close();
+	    st.close();
+	    con.close();
+
+	    return cln;
 	}
+
 
 	public List<String> filter(School school) throws Exception {
 		List<String> list = new ArrayList<>();
@@ -49,7 +48,7 @@ public class ClassNumDao extends Dao {
 
 		// SQL文の準備
 		PreparedStatement st = con.prepareStatement(
-			"SELECT class_num FROM class_num WHERE school_cd LIKE ? ORDER BY class_num");
+			"SELECT class_num FROM class_num WHERE school_cd LIKE ?");
 
 		// schoolがnullまたはcdがnullの場合は""（空文字）を代入
 		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
@@ -73,56 +72,46 @@ public class ClassNumDao extends Dao {
 	public boolean save(ClassNum classNum, String num) throws Exception {
 	    boolean result = false;
 
-	    // データベース接続取得
 	    Connection con = getConnection();
 
-	    // Schoolオブジェクトから学校コード取得
+	    // cdチェック
+	    PreparedStatement checkSt = con.prepareStatement(
+	    		"SELECT COUNT(*) FROM class_num WHERE class_num = ?");
+	    checkSt.setString(1, classNum.getClass_num());
+	    ResultSet rs = checkSt.executeQuery();
+
+	    boolean exists = false;
+	    if (rs.next()) {
+	        exists = rs.getInt(1) > 0;
+	    }
+	    rs.close();
+	    checkSt.close();
+
+	    PreparedStatement st;
 	    School school = classNum.getSchool();
-	    String school_cd = school.getCd();
+        String school_cd = school.getCd();
 
-	    // 新しいクラス番号
-	    String class_num = classNum.getClass_num();
-
-	    // class_numが変更されていない場合 → MERGEでUPSERT
-	    if (num.equals(class_num)) {
-	        // 既にデータがあれば更新、なければ挿入を行う
-	        String sql = "MERGE INTO class_num (school_cd, class_num) " +
-	                     "KEY (school_cd, class_num) " +
-	                     "VALUES (?, ?)";
-
-	        try (PreparedStatement st = con.prepareStatement(sql)) {
-	            st.setString(1, school_cd);
-	            st.setString(2, class_num);
-	            System.out.println("MERGE");
-
-	            result = st.executeUpdate() > 0;
-	        }
+	    if (exists) {
+	        // 更新処理
+	        st = con.prepareStatement("UPDATE class_num SET class_num = ? WHERE class_num = ? AND school_cd = ?");
+	        System.out.println("更新");
+	        st.setString(1, classNum.getClass_num());
+	        st.setString(2, num);
+	        st.setString(3, school_cd);
 	    } else {
-	        // class_numが変更されている場合 → DELETE + INSERT
-
-	        // 旧クラス番号でDELETE
-	        String deleteSql = "DELETE FROM class_num WHERE school_cd = ? AND class_num = ?";
-	        try (PreparedStatement st = con.prepareStatement(deleteSql)) {
-	            st.setString(1, school_cd);
-	            st.setString(2, num);
-	            System.out.println("DELETE");
-	            st.executeUpdate();
-	        }
-
-	        // 新しいクラス番号でINSERT
-	        String insertSql = "INSERT INTO class_num (school_cd, class_num) VALUES (?, ?)";
-	        try (PreparedStatement st = con.prepareStatement(insertSql)) {
-	            st.setString(1, school_cd);
-	            st.setString(2, class_num);
-	            System.out.println("INSERT");
-
-	            result = st.executeUpdate() > 0;
-	        }
+	        // 挿入処理
+	        st = con.prepareStatement("INSERT INTO class_num (school_cd, class_num) VALUES (?, ?)");
+	        System.out.println("挿入");
+	        st.setString(1, school_cd);
+	        st.setString(2, classNum.getClass_num());
 	    }
 
+	    int rows = st.executeUpdate();
+	    result = rows > 0;
+
+	    st.close();
 	    con.close();
 
 	    return result;
 	}
-
 }
