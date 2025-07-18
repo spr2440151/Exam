@@ -69,4 +69,50 @@ public class ClassNumDao extends Dao {
 
 		return list;
 	}
+
+	public boolean save(ClassNum classNum, String num) throws Exception {
+	    boolean result = false;
+
+	    Connection con = getConnection();
+
+	    // cdチェック
+	    PreparedStatement checkSt = con.prepareStatement(
+	    		"SELECT COUNT(*) FROM class_num WHERE class_num = ?");
+	    checkSt.setString(1, classNum.getClass_num());
+	    ResultSet rs = checkSt.executeQuery();
+
+	    boolean exists = false;
+	    if (rs.next()) {
+	        exists = rs.getInt(1) > 0;
+	    }
+	    rs.close();
+	    checkSt.close();
+
+	    PreparedStatement st;
+	    School school = classNum.getSchool();
+        String school_cd = school.getCd();
+
+	    if (exists) {
+	        // 更新処理
+	        st = con.prepareStatement("UPDATE class_num SET class_num = ? WHERE class_num = ? AND school_cd = ?");
+	        System.out.println("更新");
+	        st.setString(1, classNum.getClass_num());
+	        st.setString(2, num);
+	        st.setString(3, school_cd);
+	    } else {
+	        // 挿入処理
+	        st = con.prepareStatement("INSERT INTO class_num (school_cd, class_num) VALUES (?, ?)");
+	        System.out.println("挿入");
+	        st.setString(1, school_cd);
+	        st.setString(2, classNum.getClass_num());
+	    }
+
+	    int rows = st.executeUpdate();
+	    result = rows > 0;
+
+	    st.close();
+	    con.close();
+
+	    return result;
+	}
 }
