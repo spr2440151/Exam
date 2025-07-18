@@ -49,7 +49,7 @@ public class ClassNumDao extends Dao {
 
 		// SQL文の準備
 		PreparedStatement st = con.prepareStatement(
-			"SELECT class_num FROM class_num WHERE school_cd LIKE ?");
+			"SELECT class_num FROM class_num WHERE school_cd LIKE ? ORDER BY class_num");
 
 		// schoolがnullまたはcdがnullの場合は""（空文字）を代入
 		String cd = (school == null || school.getCd() == null) ? "" : school.getCd();
