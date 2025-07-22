@@ -6,7 +6,6 @@ import javax.servlet.http.HttpSession;
 
 import bean.School;
 import bean.Teacher;
-import dao.ClassNumDao;
 import tool.Action;
 
 public class ClassDeleteAction extends Action {
@@ -17,21 +16,19 @@ public class ClassDeleteAction extends Action {
 
         req.setCharacterEncoding("UTF-8");
         HttpSession session=req.getSession();
-		ClassNumDao dao = new ClassNumDao();
 		Teacher teacher = (Teacher) session.getAttribute("user");
 		School school = teacher.getSchool();
 		String url = "";
 		String cln = req.getParameter("classNum");
+		System.out.println(cln);
+		System.out.println(school);
 		try {
 			url = "class_delete.jsp";
 			req.setAttribute("num", cln);
-			req.setAttribute("school", school);
+			session.setAttribute("school", school);
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
 }
-
-//req.getRequestDispatcher("/scoremanager/main/subjectUpdate.jsp").forward(req, res);
-
