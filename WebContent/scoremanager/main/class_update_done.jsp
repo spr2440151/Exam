@@ -19,7 +19,7 @@
 		</div>
 		<div></div>
 		<br>
-		<a href="class_list.jsp">クラス一覧</a>
+		<a href="ClassList.action">クラス一覧</a>
 		</body>
 		</html>
 	</c:param>

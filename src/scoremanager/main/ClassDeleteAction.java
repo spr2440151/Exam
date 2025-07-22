@@ -25,7 +25,7 @@ public class ClassDeleteAction extends Action {
 		try {
 			url = "class_delete.jsp";
 			req.setAttribute("num", cln);
-			session.setAttribute("school", school);
+			req.setAttribute("school", school);
 			req.getRequestDispatcher(url).forward(req, res);
 		} catch (Exception e) {
 			e.printStackTrace();
