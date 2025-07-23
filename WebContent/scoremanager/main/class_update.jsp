@@ -26,11 +26,11 @@
 <form action="ClassUpdateExecute.action" method="get">
 	<div class="mb-3">
 		<label for="name" class="form-label">クラス名</label>
-			<input type="text" name="classNum" id="classNum" class="form-control" value="${num}" required>
+		<input type="text" name="classNum" id="classNum" class="form-control" value="${num}" required maxlength="3">
 	</div>
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
-	<a href="classnum_list.jsp" class="btn btn-link">戻る</a>
+	<a href="ClassList.action" class="btn btn-link">戻る</a>
 </form>
 </main>
 </body>

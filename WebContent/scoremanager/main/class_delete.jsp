@@ -41,7 +41,7 @@
 </form>
 </c:if>
 
-    <a href="class_list.jsp">戻る</a>
+    <a href="ClassList.action">戻る</a>
 </body>
 </html>
 </c:param>
