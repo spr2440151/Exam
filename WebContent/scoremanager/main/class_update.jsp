@@ -27,6 +27,13 @@
 	<div class="mb-3">
 		<label for="name" class="form-label">クラス名</label>
 		<input type="text" name="classNum" id="classNum" class="form-control" value="${num}" required maxlength="3">
+	<c:if test="${not empty errors}">
+		<div>
+			<c:forEach var="error" items="${errors}">
+				<a style="color:gold;">${error}</a>
+			</c:forEach>
+		</div>
+	</c:if>
 	</div>
 	<button type="submit" class="btn btn-primary">変更</button>
 	<br>
